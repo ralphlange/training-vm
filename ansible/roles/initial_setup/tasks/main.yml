@@ -83,6 +83,12 @@
     validate: "visudo -cf %s"
   become: true
 
+- name: Hide user 'vagrant' from the GDM greeter
+  ansible.builtin.template:
+    src: user.conf_nogreeter
+    dest: /var/lib/AccountsService/users/vagrant
+  become: true
+
 - name: ensure that python refers to python3 (fixes issue with Rocky container)
   ansible.builtin.file:
     src: /usr/bin/python3
