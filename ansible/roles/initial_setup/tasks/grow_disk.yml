@@ -28,17 +28,18 @@
   ansible.builtin.shell:
     cmd: "growpart /dev/{{ root_disk }} {{ last_partition_no }}"
   become: true
+  register: growpart
   # growpart fails if the partition is already grown
   ignore_errors: true
 
 - name: Grow xfs root filesystem to fill all available space
   ansible.builtin.shell:
     cmd: xfs_growfs {{ root_partition }}
-  when: root_fs_type == 'xfs'
+  when: (root_fs_type == 'xfs') and (growpart.rc == 0)
   become: true
 
 - name: Grow btrfs root filesystem to fill all available space
   ansible.builtin.shell:
     cmd: btrfs filesystem resize 1:max /
-  when: root_fs_type == 'btrfs'
+  when: (root_fs_type == 'btrfs') and (growpart.rc == 0)
   become: true
