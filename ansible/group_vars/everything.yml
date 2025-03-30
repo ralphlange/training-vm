@@ -6,6 +6,7 @@
 epics_modules_build: true
 catrust: false
 epics_tools: true
+archiver_appliance: true
 docker: true
 bluesky: true
 
