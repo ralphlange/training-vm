@@ -27,7 +27,14 @@
       - --strip-components=1
   when: java_installation.stat.exists == false
 
-- name: Add CA certificate to java trust store
+- name: Check if corporate CA cert exists
+  stat:
+    path: "{{ ca_trust_der_path }}"
+  register: corporate_ca_cert
+  changed_when: false
+  when: ca_trust_der_path is defined
+
+- name: Add corporate CA certificate to java trust store
   community.general.java_cert:
     cert_path: "{{ ca_trust_der_path }}"
     keystore_path: "{{ java_home }}/lib/security/cacerts"
@@ -38,7 +45,7 @@
   become: true
   environment:
     PATH: "{{ java_home }}/bin:{{ ansible_env.PATH }}"
-  when: ca_trust_der_path is defined
+  when: ca_trust_der_path is defined and corporate_ca_cert.stat.exists == true
 
 # Install open maven
 - name: Ensure mvn directory exists
