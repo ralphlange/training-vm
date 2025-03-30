@@ -1,0 +1,4 @@
+# Tomcat settings
+---
+tomcat_home: "/opt/epics-tools/lib/tomcat"
+tomcat_version: "9.0.79"
