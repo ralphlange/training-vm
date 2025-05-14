@@ -42,7 +42,7 @@
 - name: RPM Install Development Tools
   dnf:
     name:
-      - "@Development Tools"
+      - "@development-tools"
       - vim
       - sudo
       - "@{{ distro.gnome_group }}"
