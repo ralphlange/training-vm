@@ -8,7 +8,11 @@ jobs:
   check:
     uses: ./.github/workflows/_check.yml
 
-  docker_build:
+  initial:
     needs: check
-    if: needs.check.outputs.branch-pr == ''
-    uses: ./.github/workflows/_docker_build.yml
+    uses: ./.github/workflows/_initial.yml
+
+#  docker_build:
+#    needs: initial
+#    if: needs.check.outputs.branch-pr == ''
+#    uses: ./.github/workflows/_docker_build.yml

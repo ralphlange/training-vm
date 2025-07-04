@@ -1,0 +1,39 @@
+name: Build reusable base image
+
+on:
+  workflow_call:
+
+env:
+  # Define the image base name. Using github.repository for portability.
+  # The name is lowercased as Docker image names must be lowercase.
+  IMAGE_BASE_NAME: ghcr.io/${{ github.repository_owner }}/my-base-image
+  DICT_ubuntu: "{\"baseimg\":\"ubuntu:24.04\",\"installer\":\"apt\"}"
+  DICT_debian: "{\"baseimg\":\"debian:12\",   \"installer\":\"apt\"}"
+  DICT_fedora: "{\"baseimg\":\"fedora:41\",   \"installer\":\"dnf\"}"
+  DICT_rocky:  "{\"baseimg\":\"rockylinux:9\",\"installer\":\"dnf\"}"
+
+jobs:
+  build_base_image:
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [ubuntu, rocky, debian, fedora]
+    runs-on: ubuntu-latest
+    # Set permissions for GITHUB_TOKEN to push to GHCR
+    permissions:
+      contents: read
+      packages: write
+
+    # Output the full image name with the unique tag
+    outputs:
+      image_tag: ${{ steps.meta.outputs.tags }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Access dictionary
+        run: |
+          baseimg=$(echo $DICT_${{ matrix.distro }} | jq -r '.baseimg')
+          installer=$(echo $DICT_${{ matrix.distro }} | jq -r '.installer')
+          echo "baseimg = $baseimg; installer = $installer"
