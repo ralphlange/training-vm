@@ -8,10 +8,10 @@
     owner: "{{ epics_services_account }}"
     group: "{{ epics_services_account }}"
 
-- name: Install open jdk 17
+- name: Install open jdk 21
   become: true
   ansible.builtin.unarchive:
-    src: "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10%2B7/OpenJDK17U-jdk_{{ (ansible_facts['architecture'] == 'x86_64') | ternary('x64', ansible_facts['architecture']) }}_linux_hotspot_17.0.10_7.tar.gz"
+    src: "https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.9%2B10/OpenJDK21U-jdk_{{ (ansible_facts['architecture'] == 'x86_64') | ternary('x64', ansible_facts['architecture']) }}_linux_hotspot_21.0.9_10.tar.gz"
     dest: "{{ java_home }}"
     remote_src: true
     owner: "{{ epics_services_account }}"
