@@ -1,9 +1,9 @@
-# Default configuration for the available roles
+# Default configuration for all Ansible runs
+# (most settings will be overridden per host or role)
 
-# minimal defaults for fast testing - copy local.yml.sample or everything.yml
-# to local.yml and adjust as needed
+# Setting all module switches to false (just make sure the variables exist)
 initial_setup: false
-docker: true # for rootful this needs to happen before first reboot
+docker: false # for rootful this needs to happen before first reboot
 epics_modules_build: false
 catrust: false
 epics_tools: false
@@ -11,7 +11,7 @@ oac_tree: false
 archiver_appliance: false
 bluesky: false
 
-# Default configuration for the EPICS modules to build
+# Default configuration for the EPICS modules to build = minimal
 epics_modules_list:
   - base
   - pvxs
