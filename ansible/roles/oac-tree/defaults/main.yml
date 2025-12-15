@@ -1,5 +1,8 @@
 ---
-# variables for oac-tree
+# Defaults for oac-tree
+
+# build switch default (inventory setting overrides)
+oac_tree: false
 
 oactree_install_path: "/opt/oac-tree"
 

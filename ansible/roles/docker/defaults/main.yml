@@ -1,0 +1,5 @@
+---
+# Defaults for docker
+
+# build switch default (inventory setting overrides)
+docker: false

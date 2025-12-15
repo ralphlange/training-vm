@@ -1,0 +1,14 @@
+# Global defaults (inventory setting overrides)
+---
+
+# No proxy
+proxy_env: {}
+
+# Not building inside a container during CI
+in_container: false
+
+# Installation paths
+epics_install_path: "/opt/epics"
+opi_install_path: "/opt/opi"
+
+epics_services_account: root

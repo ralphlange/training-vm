@@ -1,5 +1,9 @@
-# defaults for epics_tools
 ---
+# Defaults for Phoebus (and Maven)
+
+# build switch default (inventory setting overrides)
+epics_tools: false
+
 phoebus_version: 8728dbb
 
 phoebus_launcher: "/opt/epics-tools/lib/phoebus/phoebus-product/phoebus.sh"

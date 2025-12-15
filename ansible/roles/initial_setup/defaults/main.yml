@@ -1,3 +1,9 @@
+---
+# Defaults for initial_setup
+
+# build switch default (inventory setting overrides)
+initial_setup: false
+
 # this assumes root disk device is /dev/sda override on command line if not
 root_disk: sda
 root_partition: "{{ ansible_mounts|json_query('[?mount == `/`].device') | first }}"

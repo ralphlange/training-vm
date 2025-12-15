@@ -1,3 +1,14 @@
+---
+# Defaults for EPICS modules
+
+# build switch default (inventory setting overrides)
+epics_modules_build: false
+# EPICS modules to build = minimal
+epics_modules_list:
+  - base
+  - pvxs
+
+# settings for the known EPICS modules
 epics_modules:
   base:
     name: "EPICS Base"

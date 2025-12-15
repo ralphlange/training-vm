@@ -1,3 +1,9 @@
+---
+# Defaults for bluesky
+
+# build switch default (inventory setting overrides)
+bluesky: false
+
 home_directory: "/home/{{ dev_user }}"
 
 bluesky_deploy_dir_name: ".bluesky"
