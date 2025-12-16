@@ -1,4 +1,5 @@
-# Configuration for CI testing on GitHub Actions
+---
+# Overrides for CI testing on GitHub Actions
 
 # StreamDevice, asyn, opcua and dependencies
 
@@ -10,3 +11,5 @@ epics_modules_list:
   - seq
   - asyn
   - opcua
+
+in_container: true

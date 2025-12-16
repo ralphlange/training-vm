@@ -1,6 +1,15 @@
 ---
 - name: Set up training VM
-  hosts: local
+  hosts: localhost
+  connection: local
+
+  vars:
+    # default configuration file if not specified on the CLI
+    setup: "local"
+
+  # Load the configuration based on the 'setup' variable
+  vars_files:
+    - "configs/{{ setup }}.yml"
 
   roles:
     - role: initial_setup
@@ -41,14 +50,3 @@
       when: archiver_appliance
 
   environment: "{{ proxy_env }}"
-
-- name: Set up CI base container for Training-VM
-  hosts: ci_base
-
-  roles:
-    - role: initial_setup
-    - role: common
-    - role: epics-modules
-
-  vars:
-    in_container: true

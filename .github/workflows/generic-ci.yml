@@ -1,4 +1,4 @@
-
+---
 name: Generic CI
 
 on:
@@ -47,16 +47,16 @@ jobs:
         include:
           -
             name: "areaDetector"
-            conf: "ci-areadetector.yml"
+            conf: "ci-areadetector"
           -
             name: "oac-tree"
-            conf: "ci-oac-tree.yml"
+            conf: "ci-oac-tree"
           -
             name: "Phoebus & Archiver"
-            conf: "ci-phoebus-aa.yml"
+            conf: "ci-phoebus-aa"
           -
             name: "streamDevice & opcua"
-            conf: "ci-stream-opcua.yml"
+            conf: "ci-stream-opcua"
     steps:
       -
         name: Checkout
@@ -64,7 +64,5 @@ jobs:
       -
         name: Build ${{ matrix.name }}
         run: |
-          ln -s `pwd`/ansible /ansible
-          rm -f /ansible/group_vars/local.yml
-          ln -s /ansible/group_vars/${{ matrix.conf }} /ansible/group_vars/local.yml
-          ansible-playbook -i "local," -c local /ansible/playbook.yml
+          cd ansible
+          ansible-playbook -v playbook.yml -e "setup=${{ matrix.conf }}"

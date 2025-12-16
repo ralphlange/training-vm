@@ -2,12 +2,12 @@
 # Copy this sample file to local.yml then change it
 
 # Activate/deactivate optional roles by uncommenting the associated variable below
-# (default settings are defined in all.yml)
-#initial_setup: true # only used for Vagrant build
-#docker: false # for rootful this needs to happen before first reboot
+
+#initial_setup: true # only used for Vagrant build (first run)
+#docker: true # for rootful this needs to happen before first reboot
 epics_modules_build: true
 #catrust: true
-#epics_tools: true
+epics_tools: true
 #oac_tree: true
 #archiver_appliance: true
 #bluesky: true
@@ -41,7 +41,6 @@ epics_modules_list:
 #proxy_mvn:
 #  - <proxy><id>httpproxy</id><active>true</active><protocol>http</protocol><host>proxy.example.com</host><port>8080</port></proxy>
 #  - <proxy><id>httpsproxy</id><active>true</active><protocol>https</protocol><host>proxy.example.com</host><port>8080</port></proxy>
-
 
 # [catrust] CA certificate to work through corporate firewall with deep packet inspection
 # (like e.g. ITER uses)

@@ -1,8 +1,0 @@
-# Definition for the CI base container image build
-
-initial_setup: true
-epics_modules_build: true
-
-epics_modules_list:
-  - base
-  - pvxs

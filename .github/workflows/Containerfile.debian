@@ -8,6 +8,6 @@ COPY ansible /ansible
 RUN apt-get update && apt-get install -y git ansible ansible-lint
 
 RUN ansible-galaxy install -r /ansible/requirements.yml || true
-RUN ansible-playbook -i "ci_base," -c local /ansible/playbook.yml
+RUN ansible-playbook /ansible/playbook.yml -e "setup=ci-base-image"
 
 RUN rm -fr /ansible

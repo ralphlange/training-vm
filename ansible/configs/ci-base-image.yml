@@ -1,0 +1,12 @@
+---
+# Overrides for the GitHub CI base container image build
+
+common: true
+initial_setup: true
+epics_modules_build: true
+
+epics_modules_list:
+  - base
+  - pvxs
+
+in_container: true
