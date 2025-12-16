@@ -1,0 +1,70 @@
+
+name: Generic CI
+
+on:
+  workflow_call:
+    inputs:
+      distro:
+        required: true
+        type: string
+      image:
+        required: true
+        type: string
+
+jobs:
+  build-container:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Build and push container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./.github/workflows/Containerfile.${{ inputs.distro }}
+          build-args: |
+            IMAGE=${{ inputs.image }}
+          push: true
+          tags: ghcr.io/${{ github.repository }}/epics-training-base-${{ inputs.distro }}:latest
+
+  install:
+    needs: build-container
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}/epics-training-base-${{ inputs.distro }}:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          -
+            name: "areaDetector"
+            conf: "ci-areadetector.yml"
+          -
+            name: "oac-tree"
+            conf: "ci-oac-tree.yml"
+          -
+            name: "Phoebus & Archiver"
+            conf: "ci-phoebus-aa.yml"
+          -
+            name: "streamDevice & opcua"
+            conf: "ci-stream-opcua.yml"
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Build ${{ matrix.name }}
+        run: |
+          ln -s `pwd`/ansible /ansible
+          rm -f /ansible/group_vars/local.yml
+          ln -s /ansible/group_vars/${{ matrix.conf }} /ansible/group_vars/local.yml
+          ansible-playbook -i "local," -c local /ansible/playbook.yml

@@ -1,0 +1,21 @@
+
+name: Fedora 41 Flavor
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ci-fedora.yml'
+      - '.github/workflows/generic-ci.yml'
+      - '.github/workflows/Containerfile.fedora'
+      - 'ansible/**'
+      - 'initial_setup.sh'
+      - 'update.sh'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: ./.github/workflows/generic-ci.yml
+    with:
+      distro: fedora
+      image: 'fedora:41'

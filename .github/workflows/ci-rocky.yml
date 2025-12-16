@@ -1,0 +1,21 @@
+
+name: Rocky 9 Flavor
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ci-rocky.yml'
+      - '.github/workflows/generic-ci.yml'
+      - '.github/workflows/Containerfile.rocky'
+      - 'ansible/**'
+      - 'initial_setup.sh'
+      - 'update.sh'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: ./.github/workflows/generic-ci.yml
+    with:
+      distro: rocky
+      image: 'rockylinux:9'

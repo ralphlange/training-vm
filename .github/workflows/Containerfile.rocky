@@ -1,0 +1,14 @@
+ARG IMAGE
+
+FROM $IMAGE
+
+RUN dnf install -y epel-release || dnf update -y --refresh
+RUN dnf install -y git python3-pip python3-jmespath ansible
+RUN pip3 install ansible-lint
+
+COPY ansible /ansible
+
+RUN ansible-galaxy install -r /ansible/requirements.yml || true
+RUN ansible-playbook -i "ci_base," -c local /ansible/playbook.yml
+
+RUN rm -fr /ansible

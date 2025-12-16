@@ -1,0 +1,21 @@
+
+name: Ubuntu 24.04 Flavor
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ci-ubuntu.yml'
+      - '.github/workflows/generic-ci.yml'
+      - '.github/workflows/Containerfile.ubuntu'
+      - 'ansible/**'
+      - 'initial_setup.sh'
+      - 'update.sh'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: ./.github/workflows/generic-ci.yml
+    with:
+      distro: ubuntu
+      image: 'ubuntu:24.04'

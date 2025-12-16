@@ -41,3 +41,14 @@
       when: archiver_appliance
 
   environment: "{{ proxy_env }}"
+
+- name: Set up CI base container for Training-VM
+  hosts: ci_base
+
+  roles:
+    - role: initial_setup
+    - role: common
+    - role: epics-modules
+
+  vars:
+    in_container: true

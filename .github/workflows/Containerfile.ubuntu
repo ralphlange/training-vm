@@ -1,0 +1,16 @@
+ARG IMAGE
+
+FROM $IMAGE
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+ && apt-get install -y software-properties-common \
+ && add-apt-repository ppa:ansible/ansible \
+ && apt-get install -y git ansible ansible-lint
+
+COPY ansible /ansible
+
+RUN ansible-galaxy install -r /ansible/requirements.yml || true
+RUN ansible-playbook -i "ci_base," -c local /ansible/playbook.yml
+
+RUN rm -fr /ansible

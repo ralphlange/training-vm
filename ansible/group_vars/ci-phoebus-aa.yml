@@ -1,0 +1,6 @@
+# Configuration for CI testing on GitHub Actions
+
+# Phoebus, Archiver Appliance and dependencies
+
+epics_tools: true
+archiver_appliance: true

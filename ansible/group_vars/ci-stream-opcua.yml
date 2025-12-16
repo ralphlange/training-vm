@@ -1,0 +1,12 @@
+# Configuration for CI testing on GitHub Actions
+
+# StreamDevice, asyn, opcua and dependencies
+
+epics_modules_build: true
+
+# List the EPICS modules that will be built in this order (base is mandatory)
+epics_modules_list:
+  - p4p
+  - seq
+  - asyn
+  - opcua

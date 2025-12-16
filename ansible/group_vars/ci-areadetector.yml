@@ -1,0 +1,22 @@
+# Configuration for CI testing on GitHub Actions
+
+# areaDetector and dependencies
+
+epics_modules_build: true
+
+# List the EPICS modules that will be built in this order (base is mandatory)
+epics_modules_list:
+  # pvapy does not like python 3.12, debian has boost version issues
+  - "{{ 'pvapy' if ansible_distribution == 'Rocky' else 'skip' }}"
+  - seq
+  - asyn
+  - autosave
+  - busy
+  - sscan
+  - calc
+  # Fedora xmllib2 is too new for ADCore (missing XmlGetGlobal)
+  # Debian has too early a version of ansible to accept search_string in lineinfile
+  - "{{ 'adcore' if ansible_distribution in ['Ubuntu', 'Rocky'] else 'skip' }}"
+  - "{{ 'adsimdetector' if ansible_distribution in ['Ubuntu', 'Rocky'] else 'skip' }}"
+  # only build if we built pvapy
+  - "{{ 'adpvadriver' if ansible_distribution == 'Rocky' else 'skip' }}"

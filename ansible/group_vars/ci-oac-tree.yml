@@ -1,0 +1,5 @@
+# Configuration for CI testing on GitHub Actions
+
+# oac-tree and dependencies
+
+oac_tree: true

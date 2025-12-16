@@ -1,0 +1,21 @@
+
+name: Debian 12 Flavor
+
+on:
+  push:
+    paths:
+      - '.github/workflows/ci-debian.yml'
+      - '.github/workflows/generic-ci.yml'
+      - '.github/workflows/Containerfile.debian'
+      - 'ansible/**'
+      - 'initial_setup.sh'
+      - 'update.sh'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    uses: ./.github/workflows/generic-ci.yml
+    with:
+      distro: debian
+      image: 'debian:12'
