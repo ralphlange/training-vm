@@ -14,7 +14,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci:
+  check:
+    uses: ./.github/workflows/_check.yml
+  ci-rocky:
+    needs: check
+    if: needs.check.outputs.branch-pr == ''
     uses: ./.github/workflows/generic-ci.yml
     with:
       distro: rocky
