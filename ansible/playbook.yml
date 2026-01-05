@@ -5,39 +5,39 @@
   roles:
     - role: initial_setup
       tags: initial_setup
-      when: initial_setup
+      when: initial_setup | bool
 
     - role: catrust
       tags: catrust
-      when: catrust
+      when: catrust | bool
 
     - role: common #  <- mandatory
       tags: common
 
     - role: docker
       tags: docker
-      when: docker
+      when: docker | bool
 
     - role: bluesky
       tags: bluesky
-      when: bluesky
+      when: bluesky | bool
       become: true
       become_user: "{{ dev_user}}"
 
     - role: epics-modules
       tags: epics_modules
-      when: epics_modules_build
+      when: epics_modules_build | bool
 
     - role: epics-tools
       tags: epics_tools
-      when: epics_tools
+      when: epics_tools | bool
 
     - role: oac-tree
       tags: oac_tree
-      when: oac_tree
+      when: oac_tree | bool
 
     - role: archiver-appliance
       tags: archiver_appliance
-      when: archiver_appliance
+      when: archiver_appliance | bool
 
   environment: "{{ proxy_env }}"

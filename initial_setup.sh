@@ -13,4 +13,4 @@ elif [[ "$installer" == "dnf" ]]; then
 fi
 
 ansible-galaxy install -r /ansible/requirements.yml || true
-ansible-playbook -i /ansible/hosts -e initial_setup=true $ansible_args /ansible/playbook.yml
+ansible-playbook -i /ansible/hosts -e "initial_setup=true" $ansible_args /ansible/playbook.yml
