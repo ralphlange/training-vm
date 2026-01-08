@@ -49,7 +49,7 @@ setup="-v $this_dir/../initial_setup.sh:/initial_setup.sh"
 args="-e installer=$installer"
 
 if [[ -z "$(docker ps -a -q -f name=$name)" ]]; then
-    docker run --name $name -d $ansible $docker $setup $args $image bash -c "sleep infinity"
+    docker run --net host --name $name -d $ansible $docker $setup $args $image bash -c "sleep infinity"
 else
     echo continuing with existing container $name
 fi
