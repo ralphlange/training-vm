@@ -57,6 +57,6 @@
 
 - name: "{{ module.name }} | CONFIG_SITE.local"
   ansible.builtin.template:
-    src: opcua_CONFIG_SITE.local.j2
+    src: "{{ playbook_dir }}/roles/m-opcua/templates/opcua_CONFIG_SITE.local.j2"
     dest: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/CONFIG_SITE.local"
   become: true

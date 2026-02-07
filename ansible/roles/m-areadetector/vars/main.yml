@@ -13,7 +13,7 @@ m_areadetector_modules:
     url: "https://github.com/epics-modules/sscan/archive/refs/tags/R2-11-6.tar.gz"
     release_var: "SSCAN"
     release_sortkey: "10"
-    pre_hook: "{{ role_path }}/tasks/sscan_prep.yml"
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/sscan_prep.yml"
 
   - id: calc
     name: "Calc module (misc records)"
@@ -44,7 +44,7 @@ m_areadetector_modules:
       - hdf5-devel
     enable_repos:
       - crb
-    pre_hook: "{{ role_path }}/tasks/adcore_prep.yml"
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adcore_prep.yml"
 
   - id: adsimdetector
     name: "AreaDetector - SimDetector"
@@ -52,7 +52,7 @@ m_areadetector_modules:
     url: "https://github.com/areaDetector/ADSimDetector/archive/refs/tags/R2-11.tar.gz"
     release_var: "ADSIMDETECTOR"
     release_sortkey: "10"
-    pre_hook: "{{ role_path }}/tasks/adsimdetector_prep.yml"
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adsimdetector_prep.yml"
 
   - id: adpvadriver
     name: "AreaDetector - pvaDriver"
@@ -60,4 +60,4 @@ m_areadetector_modules:
     url: "https://github.com/areaDetector/pvaDriver/archive/refs/tags/R1-6.tar.gz"
     release_var: "PVADRIVER"
     release_sortkey: "10"
-    pre_hook: "{{ role_path }}/tasks/adpvadriver_prep.yml"
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adpvadriver_prep.yml"
