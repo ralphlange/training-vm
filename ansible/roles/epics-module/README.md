@@ -20,8 +20,8 @@ Each dictionary in `epics_modules_to_build` should have the following keys:
 - `required_debs`: (Optional) List of Debian packages required for building.
 - `required_rpms`: (Optional) List of RPM packages required for building.
 - `enable_repos`: (Optional) List of repositories to enable when installing RPMs.
-- `pre_hook`: (Optional) Absolute path to a task file to run before the build. Recommendation: use `"{{ role_path }}/tasks/my_pre_hook.yml"`.
-- `post_hook`: (Optional) Absolute path to a task file to run after the build. Recommendation: use `"{{ role_path }}/tasks/my_post_hook.yml"`.
+- `pre_hook`: (Optional) Absolute path to a task file to run before the build. Recommendation: use `"{{ playbook_dir }}/roles/role-name/tasks/my_pre_hook.yml"`.
+- `post_hook`: (Optional) Absolute path to a task file to run after the build. Recommendation: use `"{{ playbook_dir }}/roles/role-name/tasks/my_post_hook.yml"`.
 - `args`: (Optional) Additional arguments to pass to `make`.
 - `exclude`: (Optional) List of patterns to exclude when extracting the tarball.
 
@@ -38,7 +38,7 @@ m_example_modules:
     url: "https://example.com/example-1.0.0.tar.gz"
     release_var: "EXAMPLE"
     release_sortkey: "10"
-    pre_hook: "{{ role_path }}/tasks/example_prep.yml"
+    pre_hook: "{{ playbook_dir }}/roles/m-example/tasks/example_prep.yml"
 ```
 
 `tasks/main.yml`:
