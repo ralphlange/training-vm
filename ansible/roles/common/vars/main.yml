@@ -4,3 +4,19 @@ epics_install_path: "/opt/epics"
 opi_install_path: "/opt/opi"
 
 epics_services_account: root
+
+# Module versions
+epics_base_version: "7.0.9"
+pvxs_version: "1.3.1"
+p4p_version: "4.2.0"
+pvapy_version: "5.3.1"
+seq_version: "2.2.9"
+asyn_version: "4.44.2"
+autosave_version: "5.11"
+busy_version: "1.7.4"
+sscan_version: "2.11.6"
+calc_version: "3.7.5"
+adcore_version: "3.13"
+adsimdetector_version: "2.11"
+adpvadriver_version: "1.6"
+opcua_version: "0.11.0"

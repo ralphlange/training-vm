@@ -2,7 +2,7 @@
 m_autosave_modules:
   - id: autosave
     name: "autoSaveRestore"
-    version: "5.11"
-    url: "https://github.com/epics-modules/autosave/archive/refs/tags/R5-11.tar.gz"
+    version: "{{ autosave_version }}"
+    url: "https://github.com/epics-modules/autosave/archive/refs/tags/R{{ autosave_version | replace('.', '-') }}.tar.gz"
     release_var: "AUTOSAVE"
     release_sortkey: "10"

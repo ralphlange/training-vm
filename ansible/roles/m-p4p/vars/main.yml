@@ -2,8 +2,8 @@
 m_p4p_modules:
   - id: p4p
     name: "p4p"
-    version: "4.2.0"
-    url: "https://github.com/epics-base/p4p/archive/refs/tags/4.2.0.tar.gz"
+    version: "{{ p4p_version }}"
+    url: "https://github.com/epics-base/p4p/archive/refs/tags/{{ p4p_version }}.tar.gz"
     release_var: "P4P"
     release_sortkey: "10"
     required_debs:

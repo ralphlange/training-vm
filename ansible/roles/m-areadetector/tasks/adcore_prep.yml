@@ -23,6 +23,13 @@
       {%- endif %}
   become: true
 
+- name: "{{ module.name }} | Ensure iocBoot directory exists"
+  ansible.builtin.file:
+    path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocBoot"
+    state: directory
+    mode: '0755'
+  become: true
+
 - name: "{{ module.name }} | Common plugins st.cmd snippet"
   ansible.builtin.template:
     src: "{{ playbook_dir }}/roles/m-areadetector/templates/commonPlugins.cmd.j2"

@@ -2,30 +2,30 @@
 m_areadetector_modules:
   - id: busy
     name: "Busy Record"
-    version: "1.7.4"
-    url: "https://github.com/epics-modules/busy/archive/refs/tags/R1-7-4.tar.gz"
+    version: "{{ busy_version }}"
+    url: "https://github.com/epics-modules/busy/archive/refs/tags/R{{ busy_version | replace('.', '-') }}.tar.gz"
     release_var: "BUSY"
     release_sortkey: "10"
 
   - id: sscan
     name: "SScan module"
-    version: "2.11.6"
-    url: "https://github.com/epics-modules/sscan/archive/refs/tags/R2-11-6.tar.gz"
+    version: "{{ sscan_version }}"
+    url: "https://github.com/epics-modules/sscan/archive/refs/tags/R{{ sscan_version | replace('.', '-') }}.tar.gz"
     release_var: "SSCAN"
     release_sortkey: "10"
     pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/sscan_prep.yml"
 
   - id: calc
     name: "Calc module (misc records)"
-    version: "3.7.5"
-    url: "https://github.com/epics-modules/calc/archive/refs/tags/R3-7-5.tar.gz"
+    version: "{{ calc_version }}"
+    url: "https://github.com/epics-modules/calc/archive/refs/tags/R{{ calc_version | replace('.', '-') }}.tar.gz"
     release_var: "CALC"
     release_sortkey: "10"
 
   - id: adcore
     name: "AreaDetector - Core"
-    version: "3.13"
-    url: "https://github.com/areaDetector/ADCore/archive/refs/tags/R3-13.tar.gz"
+    version: "{{ adcore_version }}"
+    url: "https://github.com/areaDetector/ADCore/archive/refs/tags/R{{ adcore_version | replace('.', '-') }}.tar.gz"
     release_var: "ADCORE"
     release_sortkey: "10"
     required_debs:
@@ -48,16 +48,16 @@ m_areadetector_modules:
 
   - id: adsimdetector
     name: "AreaDetector - SimDetector"
-    version: "2.11"
-    url: "https://github.com/areaDetector/ADSimDetector/archive/refs/tags/R2-11.tar.gz"
+    version: "{{ adsimdetector_version }}"
+    url: "https://github.com/areaDetector/ADSimDetector/archive/refs/tags/R{{ adsimdetector_version | replace('.', '-') }}.tar.gz"
     release_var: "ADSIMDETECTOR"
     release_sortkey: "10"
     pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adsimdetector_prep.yml"
 
   - id: adpvadriver
     name: "AreaDetector - pvaDriver"
-    version: "1.6"
-    url: "https://github.com/areaDetector/pvaDriver/archive/refs/tags/R1-6.tar.gz"
+    version: "{{ adpvadriver_version }}"
+    url: "https://github.com/areaDetector/pvaDriver/archive/refs/tags/R{{ adpvadriver_version | replace('.', '-') }}.tar.gz"
     release_var: "PVADRIVER"
     release_sortkey: "10"
     pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adpvadriver_prep.yml"

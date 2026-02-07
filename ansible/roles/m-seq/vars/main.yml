@@ -2,8 +2,8 @@
 m_seq_modules:
   - id: seq
     name: "SNL Sequencer"
-    version: "2.2.9"
-    url: "https://github.com/epics-modules/sequencer/archive/refs/tags/R2-2-9.tar.gz"
+    version: "{{ seq_version }}"
+    url: "https://github.com/epics-modules/sequencer/archive/refs/tags/R{{ seq_version | replace('.', '-') }}.tar.gz"
     release_var: "SNCSEQ"
     release_sortkey: "10"
     add_to_path: true

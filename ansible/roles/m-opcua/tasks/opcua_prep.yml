@@ -55,6 +55,13 @@
     mode: "555"
   become: true
 
+- name: "{{ module.name }} | Ensure configure directory exists"
+  ansible.builtin.file:
+    path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure"
+    state: directory
+    mode: '0755'
+  become: true
+
 - name: "{{ module.name }} | CONFIG_SITE.local"
   ansible.builtin.template:
     src: "{{ playbook_dir }}/roles/m-opcua/templates/opcua_CONFIG_SITE.local.j2"

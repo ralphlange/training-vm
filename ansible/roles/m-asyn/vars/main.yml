@@ -2,8 +2,8 @@
 m_asyn_modules:
   - id: asyn
     name: "ASYN"
-    version: "4.44.2"
-    url: "https://github.com/epics-modules/asyn/archive/refs/tags/R4-44-2.tar.gz"
+    version: "{{ asyn_version }}"
+    url: "https://github.com/epics-modules/asyn/archive/refs/tags/R{{ asyn_version | replace('.', '-') }}.tar.gz"
     release_var: "ASYN"
     release_sortkey: "10"
     required_debs:

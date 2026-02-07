@@ -21,6 +21,6 @@
 
 - name: "{{ module.name }} | Fix location of XML schema in XML files"
   ansible.builtin.shell:
-    cmd: sed -si "s|../../../../../ADCore/|{{ epics_install_path }}/adcore-{{ epics_modules['adcore'].version }}/|" *.xml
+    cmd: sed -si "s|../../../../../ADCore/|{{ epics_install_path }}/adcore-{{ adcore_version }}/|" *.xml
     chdir: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocs/simDetectorIOC/iocBoot/iocSimDetector"
   become: true
