@@ -1,0 +1,6 @@
+---
+- name: Install ASYN
+  include_role:
+    name: epics-module
+  vars:
+    epics_modules_to_build: "{{ m_asyn_modules }}"

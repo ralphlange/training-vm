@@ -1,0 +1,12 @@
+---
+- name: "{{ module.name }} | Create mandatory configure/RELEASE.local"
+  ansible.builtin.copy:
+    dest: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE.local"
+    content: |
+      -include $(TOP)/../RELEASE.local
+  become: true
+
+- name: "{{ module.name }} | Run configuration step"
+  ansible.builtin.command: |
+    make -C "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}" configure "EPICS_BASE={{ epics_install_path }}/base-{{ epics_modules['base'].version }}"
+  become: true

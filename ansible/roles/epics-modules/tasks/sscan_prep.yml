@@ -1,7 +1,0 @@
----
-- name: "{{ epics_modules[item].name }} | Fix configure/RELEASE"
-  ansible.builtin.lineinfile:
-    path: "{{ epics_install_path }}/{{ item }}-{{ epics_modules[item].version }}/configure/RELEASE"
-    regexp: '^SNCSEQ='
-    state: absent
-  become: true

@@ -5,10 +5,51 @@
     state: absent
   become: true
 
-- name: Build EPICS Modules
-  include_tasks: build_module.yml
-  loop: "{{ epics_modules_list }}"
-  when: item != 'skip'
+- name: Install m-base (EPICS Base and PVXS)
+  include_role:
+    name: m-base
+  when: "'base' in epics_modules_list or 'pvxs' in epics_modules_list"
+
+- name: Install m-p4p
+  include_role:
+    name: m-p4p
+  when: "'p4p' in epics_modules_list"
+
+- name: Install m-pvaPy
+  include_role:
+    name: m-pvaPy
+  when: "'pvapy' in epics_modules_list"
+
+- name: Install m-seq
+  include_role:
+    name: m-seq
+  when: "'seq' in epics_modules_list"
+
+- name: Install m-asyn
+  include_role:
+    name: m-asyn
+  when: "'asyn' in epics_modules_list"
+
+- name: Install m-autosave
+  include_role:
+    name: m-autosave
+  when: "'autosave' in epics_modules_list"
+
+- name: Install m-areadetector
+  include_role:
+    name: m-areadetector
+  when: >
+    'adcore' in epics_modules_list or
+    'adsimdetector' in epics_modules_list or
+    'adpvadriver' in epics_modules_list or
+    'busy' in epics_modules_list or
+    'sscan' in epics_modules_list or
+    'calc' in epics_modules_list
+
+- name: Install m-opcua
+  include_role:
+    name: m-opcua
+  when: "'opcua' in epics_modules_list"
 
 - name: "Copy .bob files under {{ epics_install_path }} to {{ opi_install_path }}"
   ansible.builtin.shell:

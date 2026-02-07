@@ -1,0 +1,6 @@
+---
+- name: Install autosave
+  include_role:
+    name: epics-module
+  vars:
+    epics_modules_to_build: "{{ m_autosave_modules }}"
