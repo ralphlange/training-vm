@@ -45,6 +45,8 @@ m_areadetector_modules:
     enable_repos:
       - crb
     pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adcore_prep.yml"
+    # Fedora/Rocky libxml2 is too new for Core 3.13 (missing XmlGetGlobal)
+    skip: "{{ ansible_distribution not in ['Ubuntu'] }}"
 
   - id: adsimdetector
     name: "AreaDetector - SimDetector"
@@ -53,6 +55,7 @@ m_areadetector_modules:
     release_var: "ADSIMDETECTOR"
     release_sortkey: "10"
     pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adsimdetector_prep.yml"
+    skip: "{{ ansible_distribution not in ['Ubuntu'] }}"
 
   - id: adpvadriver
     name: "AreaDetector - pvaDriver"
@@ -61,3 +64,5 @@ m_areadetector_modules:
     release_var: "PVADRIVER"
     release_sortkey: "10"
     pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adpvadriver_prep.yml"
+    # only build if we built pvapy
+    skip: "{{ ansible_distribution != 'Rocky' }}"

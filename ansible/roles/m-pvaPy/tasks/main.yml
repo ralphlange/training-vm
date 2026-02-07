@@ -4,7 +4,9 @@
     name: epics-module
   vars:
     epics_modules_to_build: "{{ m_pvapy_modules }}"
-  when: not (m_pvapy_installed | default(false))
+  when:
+    - not (m_pvapy_installed | default(false))
+    - ansible_distribution == 'Rocky'
 
 - name: Mark m-pvaPy as installed
   set_fact:

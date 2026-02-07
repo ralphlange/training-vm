@@ -2,14 +2,14 @@
 - name: "{{ module.name }} | Fix configure/RELEASE to include RELEASE.local"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE"
-    search_string: '-include $(TOP)/RELEASE.local'
+    regexp: '^\s*-include\s+\$\(TOP\)/RELEASE.local'
     line: '-include $(TOP)/../RELEASE.local'
   become: true
 
 - name: "{{ module.name }} | Fix example IOC configure/RELEASE to include RELEASE.local"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocs/pvaDriverIOC/configure/RELEASE"
-    search_string: '-include $(TOP)/RELEASE.local'
+    regexp: '^\s*-include\s+\$\(TOP\)/RELEASE.local'
     line: '-include $(TOP)/../RELEASE.local'
   become: true
 
