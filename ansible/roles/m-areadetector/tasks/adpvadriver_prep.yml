@@ -1,19 +1,19 @@
 ---
-- name: "{{ module.name }} | Fix configure/RELEASE to include RELEASE.local"
+- name: "{{ module.name }} pre-build hook | Fix configure/RELEASE to include RELEASE.local"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE"
     regexp: '^\s*-include\s+\$\(TOP\)/RELEASE.local'
     line: '-include $(TOP)/../RELEASE.local'
   become: true
 
-- name: "{{ module.name }} | Fix example IOC configure/RELEASE to include RELEASE.local"
+- name: "{{ module.name }} pre-build hook | Fix example IOC configure/RELEASE to include RELEASE.local"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocs/pvaDriverIOC/configure/RELEASE"
     regexp: '^\s*-include\s+\$\(TOP\)/RELEASE.local'
     line: '-include $(TOP)/../RELEASE.local'
   become: true
 
-- name: "{{ module.name }} | Make example IOC include ADCORE/configure/CONFIG_SITE"
+- name: "{{ module.name }} pre-build hook | Make example IOC include ADCORE/configure/CONFIG_SITE"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocs/pvaDriverIOC/configure/CONFIG_SITE"
     line: '-include $(ADCORE)/configure/CONFIG_SITE'

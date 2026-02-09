@@ -1,12 +1,12 @@
 ---
-- name: "{{ module.name }} | Ensure configure/os directory exists"
+- name: "{{ module.name }} pre-build hook | Ensure configure/os directory exists"
   ansible.builtin.file:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/os"
     state: directory
     mode: '0755'
   become: true
 
-- name: "{{ module.name }} | Set C++ standard to C++11"
+- name: "{{ module.name }} pre-build hook | Set C++ standard to C++11"
   ansible.builtin.copy:
     dest: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/os/CONFIG_SITE.Common.linuxCommon"
     content: "OP_SYS_CXXFLAGS += -std=c++11"

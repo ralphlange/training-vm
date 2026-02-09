@@ -38,7 +38,7 @@
       ansible.builtin.set_fact:
         m_rebuild_all: true
 
-    - name: "Rebuild {{ module.name }} | Download source tar"
+    - name: "{{ module.name }} rebuild | Download source tar"
       get_url:
         url: "{{ module.url }}"
         dest: "/tmp/{{ module.id }}-{{ module.version }}.tar.gz"
@@ -47,7 +47,7 @@
       retries: 5
       delay: 2
 
-    - name: "Rebuild {{ module.name }} | Extract source tar"
+    - name: "{{ module.name }} rebuild | Extract source tar"
       unarchive:
         src: "/tmp/{{ module.id }}-{{ module.version }}.tar.gz"
         dest: "{{ epics_install_path }}"
@@ -60,18 +60,18 @@
           - "s|^[^/]*|{{ module.id }}-{{ module.version }}|" # normalize source path
       become: true
 
-    - name: "Rebuild {{ module.name }} | Remove SUPPORT definition from configure/RELEASE"
+    - name: "{{ module.name }} rebuild | Remove SUPPORT definition from configure/RELEASE"
       ansible.builtin.lineinfile:
         path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE"
         state: absent
         regexp: "^SUPPORT="
       become: true
 
-    - name: "Rebuild {{ module.name }} | Run pre-build hook"
+    - name: "{{ module.name }} rebuild | Run pre-build hook"
       include_tasks: "{{ module.pre_hook }}"
       when: module.pre_hook is defined
 
-    - name: "Rebuild {{ module.name }} | Compile from sources (this may take a while)"
+    - name: "{{ module.name }} rebuild | Compile from sources (this may take a while)"
       command: make {{ module.args | default('') }} -C {{ epics_install_path }}/{{ module.id }}-{{ module.version }} all
       register: build_result
       become: true
@@ -79,19 +79,19 @@
       retries: 4
       until: build_result.rc == 0
 
-    - name: "Rebuild {{ module.name }} | Clean intermediate build files"
+    - name: "{{ module.name }} rebuild | Clean intermediate build files"
       command: make -C {{ epics_install_path }}/{{ module.id }}-{{ module.version }} clean
       become: true
 
-    - name: "Rebuild {{ module.name }} | Run post-build hook"
+    - name: "{{ module.name }} rebuild | Run post-build hook"
       include_tasks: "{{ module.post_hook }}"
       when: module.post_hook is defined
 
-    - name: "Rebuild {{ module.name }} | Show build result"
+    - name: "{{ module.name }} rebuild | Show build result"
       debug:
         msg: "Building {{ module.name }} {{ 'was successful' if build_result.rc == 0 else 'failed' }}"
 
-    - name: "Rebuild {{ module.name }} | Create module build flag"
+    - name: "{{ module.name }} rebuild | Create module build flag"
       copy:
         content: ""
         dest: "{{ epics_install_path }}/.flag/{{ module.id }}-{{ module.version }}"

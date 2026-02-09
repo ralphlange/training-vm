@@ -1,5 +1,5 @@
 ---
-- name: "{{ module.name }} | Switch configuration to TIRPC"
+- name: "{{ module.name }} pre-build hook | Switch configuration to TIRPC"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/CONFIG_SITE"
     regexp: '#\s*TIRPC=YES'
