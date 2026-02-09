@@ -1,9 +1,9 @@
 # this assumes root disk device is /dev/sda override on command line if not
 root_disk: sda
-root_partition: "{{ ansible_mounts|json_query('[?mount == `/`].device') | first }}"
-root_fs_type: "{{ ansible_mounts|json_query('[?mount == `/`].fstype') | first }}"
-partitions: "{{ ansible_devices[root_disk].partitions.keys() | list | sort }}"
-last_partition_no: "{{ ansible_devices[root_disk].partitions.keys() | list | length }}"
+root_partition: "{{ ansible_facts.mounts | json_query('[?mount == `/`].device') | first }}"
+root_fs_type: "{{ ansible_facts.mounts | json_query('[?mount == `/`].fstype') | first }}"
+partitions: "{{ ansible_facts.devices['root_disk'].partitions.keys() | list | sort }}"
+last_partition_no: "{{ ansible_facts.devices['root_disk'].partitions.keys() | list | length }}"
 
 redhat_defaults:
   gnome_group: "Workstation"
@@ -30,7 +30,7 @@ distros:
   Debian: "{{ debian_defaults }}"
   Ubuntu: "{{ debian_defaults | ansible.builtin.combine({'gdm_config':'/etc/gdm3/custom.conf'}) }}"
 
-distro: "{{ distros[ansible_distribution] }}"
+distro: "{{ distros[ansible_facts['distribution']] }}"
 
 is_debian: '{{ distro.installer == "apt" }}'
 is_redhat: '{{ distro.installer == "dnf" }}'

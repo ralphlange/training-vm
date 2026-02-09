@@ -76,22 +76,22 @@
     tag: "{{ bluesky_docker_image_tag }}"
     source: pull
     state: present
-  when: ansible_distribution in ["Ubuntu", "Debian"]
+  when: ansible_facts['distribution'] in ["Ubuntu", "Debian"]
 
 - name: Pull specific container image version (Rocky/Fedora)
   containers.podman.podman_image:
     name: "{{ bluesky_docker_image }}"
     tag: "{{ bluesky_docker_image_tag }}"
     state: present
-  when: ansible_distribution in ["Rocky", "Fedora"]
+  when: ansible_facts['distribution'] in ["Rocky", "Fedora"]
 
 - name: Restart Docker service (Ubuntu/Debian)
   ansible.builtin.command: "sudo systemctl restart docker"
-  when: ansible_distribution in ["Ubuntu", "Debian"]
+  when: ansible_facts['distribution'] in ["Ubuntu", "Debian"]
 
 - name: Restart Podman service (Rocky/Fedora)
   ansible.builtin.command: "sudo systemctl restart podman"
-  when: ansible_distribution in ["Rocky", "Fedora"]
+  when: ansible_facts['distribution'] in ["Rocky", "Fedora"]
 
 - name: Create tiled_data directory
   ansible.builtin.file:

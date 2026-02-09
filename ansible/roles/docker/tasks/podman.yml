@@ -3,8 +3,8 @@
   ansible.builtin.yum_repository:
     name: docker-ce-stable
     description: official docker stable rpm repo
-    baseurl: https://download.docker.com/linux/{{ 'centos' if ansible_distribution == 'Rocky' else ansible_distribution | lower }}/$releasever/$basearch/stable
-    gpgkey: https://download.docker.com/linux/{{ 'centos' if ansible_distribution == 'Rocky' else ansible_distribution | lower }}/gpg
+    baseurl: https://download.docker.com/linux/{{ 'centos' if ansible_facts['distribution'] == 'Rocky' else ansible_facts['distribution'] | lower }}/$releasever/$basearch/stable
+    gpgkey: https://download.docker.com/linux/{{ 'centos' if ansible_facts['distribution'] == 'Rocky' else ansible_facts['distribution'] | lower }}/gpg
   become: true
 
 - name: Install RPM prerequisites

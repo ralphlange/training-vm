@@ -9,7 +9,7 @@
   when: not in_container
 
 - name: Replace mirrorlist with specific mirrors for Rocky
-  when: ansible_distribution == 'Rocky'
+  when: ansible_facts['distribution'] == 'Rocky'
   block:
     - name: Comment out mirrorlist for Rocky
       ansible.builtin.replace:

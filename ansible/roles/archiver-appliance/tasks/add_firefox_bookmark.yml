@@ -45,7 +45,7 @@
 - name: "Backup places.sqlite before making changes"
   ansible.builtin.copy:
     src: "{{ places_db_path }}"
-    dest: "{{ places_db_path }}.bak-{{ ansible_date_time.iso8601 }}"
+    dest: "{{ places_db_path }}.bak-{{ ansible_facts['date_time'].iso8601 }}"
     remote_src: yes
   when: check_bookmark.stdout == "0" # Only run if the bookmark doesn't exist
 
