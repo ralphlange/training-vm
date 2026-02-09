@@ -1,5 +1,5 @@
 ---
-- name: "{{ module.name }} | Fix configure/RELEASE"
+- name: "{{ module.name }} pre-build hook | Fix configure/RELEASE"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE"
     regexp: '^SNCSEQ='

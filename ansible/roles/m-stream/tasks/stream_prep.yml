@@ -1,18 +1,18 @@
 ---
-- name: "{{ module.name }} | Ensure configure directory exists"
+- name: "{{ module.name }} pre-build hook | Ensure configure directory exists"
   ansible.builtin.file:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure"
     state: directory
     mode: '0755'
   become: true
 
-- name: "{{ module.name }} | CONFIG_SITE.local"
+- name: "{{ module.name }} pre-build hook | Add CONFIG_SITE.local"
   ansible.builtin.template:
     src: "{{ playbook_dir }}/roles/m-stream/templates/CONFIG_SITE.local.j2"
     dest: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/CONFIG_SITE.local"
   become: true
 
-- name: "{{ module.name }} | Download PCRE sources"
+- name: "{{ module.name }} pre-build hook | Download PCRE sources"
   ansible.builtin.unarchive:
     src: "https://sourceforge.net/projects/pcre/files/pcre/8.45/pcre-8.45.tar.bz2/download"
     dest: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/"
@@ -24,13 +24,13 @@
       - "s|^[^/]*|pcre|" # normalize source path
   become: true
 
-- name: "{{ module.name }} | Configure PCRE"
+- name: "{{ module.name }} pre-build hook | Configure PCRE"
   ansible.builtin.command:
     cmd: ./configure
     chdir: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/pcre"
   become: true
 
-- name: "{{ module.name }} | Build PCRE (this may take a while)"
+- name: "{{ module.name }} pre-build hook | Build PCRE (this may take a while)"
   ansible.builtin.command:
     cmd: make install
     chdir: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/pcre"

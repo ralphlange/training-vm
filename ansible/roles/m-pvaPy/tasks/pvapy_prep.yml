@@ -1,16 +1,16 @@
 ---
-- name: "{{ module.name }} | Prepare configure"
+- name: "{{ module.name }} pre-build hook | Prepare configure"
   ansible.builtin.shell: |
     make -C "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}" configure "EPICS_BASE={{ epics_install_path }}/base-{{ epics_base_version }}"
   become: true
 
-- name: "{{ module.name }} | Add include to configure/CONFIG_SITE.local"
+- name: "{{ module.name }} pre-build hook | Add include to configure/CONFIG_SITE.local"
   ansible.builtin.lineinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/CONFIG_SITE.local"
     line: "-include $(TOP)/../RELEASE.local"
   become: true
 
-- name: "{{ module.name }} | Fix location of boost for RedHat"
+- name: "{{ module.name }} pre-build hook | Fix location of boost for RedHat"
   ansible.builtin.blockinfile:
     path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/CONFIG_SITE.local"
     block: |
