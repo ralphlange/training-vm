@@ -1,6 +1,0 @@
----
-- name: "{{ epics_modules[item].name }} | Set C++ standard to C++11"
-  ansible.builtin.copy:
-    dest: "{{ epics_install_path }}/{{ item }}-{{ epics_modules[item].version }}/configure/os/CONFIG_SITE.Common.linuxCommon"
-    content: "OP_SYS_CXXFLAGS += -std=c++11"
-  become: true

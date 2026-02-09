@@ -1,0 +1,20 @@
+---
+opcua_version: "0.11.0"
+
+m_opcua_modules:
+  - id: opcua
+    name: "OPC UA Support (open62541)"
+    version: "{{ opcua_version }}"
+    url: "https://github.com/epics-modules/opcua/archive/refs/tags/v{{ opcua_version }}.tar.gz"
+    release_var: "OPCUA"
+    release_sortkey: "10"
+    required_debs:
+      - cmake
+      - libssl-dev
+      - libxml2-dev
+    required_rpms:
+      - cmake
+      - openssl-devel
+      - libxml2-devel
+    pre_hook: "{{ playbook_dir }}/roles/m-opcua/tasks/opcua_prep.yml"
+    args: -j {{ ansible_facts.processor_vcpus }}

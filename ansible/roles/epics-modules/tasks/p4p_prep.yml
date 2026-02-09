@@ -1,6 +1,0 @@
----
-- name: "{{ epics_modules[item].name }} | Set python version"
-  ansible.builtin.copy:
-    dest: "{{ epics_install_path }}/{{ item }}-{{ epics_modules[item].version }}/configure/os/CONFIG_SITE.Common.linuxCommon"
-    content: "PYTHON = python3"
-  become: true
