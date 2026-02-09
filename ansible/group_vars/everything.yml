@@ -3,7 +3,6 @@
 #
 # For use in fully testing VMs
 
-epics_modules_build: true
 catrust: false
 epics_tools: true
 oac_tree: true
@@ -11,25 +10,10 @@ archiver_appliance: true
 docker: true
 bluesky: true
 
-# List the EPICS modules that will be built in this order (base is mandatory)
-epics_modules_list:
-  - base
-  - pvxs
-  # Two alternative Python wrappers
-  - p4p
-  # pvapy does not like python 3.12, debian has boost version issues
-  - "{{ 'pvapy' if ansible_facts['distribution'] == 'Rocky' else 'skip' }}"
-  - seq
-  - asyn
-  - opcua
-  # AreaDetector dependencies
-  - autosave
-  - busy
-  - sscan
-  - calc
-  # Fedora xmllib2 is too new for (ADCore missing XmlGetGlobal)
-  # debian has too early a version of ansible to accept search_string in lineinfile
-  - "{{ 'adcore' if ansible_facts['distribution'] in ['Ubuntu', 'Rocky'] else 'skip' }}"
-  - "{{ 'adsimdetector' if ansible_facts['distribution'] in ['Ubuntu', 'Rocky'] else 'skip' }}"
-  # only build if we built pvapy
-  - "{{ 'adpvadriver' if ansible_facts['distribution'] == 'Rocky' else 'skip' }}"
+m_base: true
+m_p4p: true
+m_pvaPy: true
+m_seq: true
+m_areadetector: true
+m_opcua: true
+m_stream: true
