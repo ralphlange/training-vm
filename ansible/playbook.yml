@@ -22,14 +22,6 @@
       tags: m-areadetector
       when: m_areadetector | default(false) | bool
 
-    - role: m-asyn
-      tags: m-asyn
-      when: m_asyn | default(false) | bool
-
-    - role: m-autosave
-      tags: m-autosave
-      when: m_autosave | default(false) | bool
-
     - role: m-opcua
       tags: m-opcua
       when: m_opcua | default(false) | bool

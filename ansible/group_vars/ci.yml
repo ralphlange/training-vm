@@ -3,7 +3,6 @@
 #
 # For use by CI running in containers
 
-epics_modules_build: true
 catrust: false
 epics_tools: true
 oac_tree: true
@@ -18,11 +17,8 @@ m_base: true
 m_p4p: true
 m_pvaPy: true
 m_seq: true
-m_asyn: true
 m_areadetector: true
-m_autosave: true
 m_opcua: true
-m_seq: true
 m_stream: true
 
 # tell ansible that we are in a container instead of VM
