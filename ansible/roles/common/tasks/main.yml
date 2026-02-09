@@ -3,7 +3,7 @@
   ansible.builtin.assert:
     that:
       - is_debian or is_redhat
-    fail_msg: "Unkown distro {{ ansible_distribution }}"
+    fail_msg: "Unkown distro {{ ansible_facts['distribution'] }}"
 
 - name: Install common packages
   dnf:

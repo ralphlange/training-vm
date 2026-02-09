@@ -18,7 +18,7 @@ epics_modules_list:
   # Two alternative Python wrappers
   - p4p
   # pvapy does not like python 3.12, debian has boost version issues
-  - "{{ 'pvapy' if ansible_distribution == 'Rocky' else 'skip' }}"
+  - "{{ 'pvapy' if ansible_facts['distribution'] == 'Rocky' else 'skip' }}"
   - seq
   - asyn
   - opcua
@@ -29,7 +29,7 @@ epics_modules_list:
   - calc
   # Fedora xmllib2 is too new for (ADCore missing XmlGetGlobal)
   # debian has too early a version of ansible to accept search_string in lineinfile
-  - "{{ 'adcore' if ansible_distribution in ['Ubuntu', 'Rocky'] else 'skip' }}"
-  - "{{ 'adsimdetector' if ansible_distribution in ['Ubuntu', 'Rocky'] else 'skip' }}"
+  - "{{ 'adcore' if ansible_facts['distribution'] in ['Ubuntu', 'Rocky'] else 'skip' }}"
+  - "{{ 'adsimdetector' if ansible_facts['distribution'] in ['Ubuntu', 'Rocky'] else 'skip' }}"
   # only build if we built pvapy
-  - "{{ 'adpvadriver' if ansible_distribution == 'Rocky' else 'skip' }}"
+  - "{{ 'adpvadriver' if ansible_facts['distribution'] == 'Rocky' else 'skip' }}"
