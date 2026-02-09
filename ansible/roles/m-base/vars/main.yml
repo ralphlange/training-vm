@@ -1,0 +1,44 @@
+---
+epics_base_version: "7.0.9"
+pvxs_version: "1.3.1"
+
+m_base_modules:
+  - id: base
+    name: "EPICS Base"
+    version: "{{ epics_base_version }}"
+    url: "https://github.com/epics-base/epics-base/releases/download/R{{ epics_base_version }}/base-{{ epics_base_version }}.tar.gz"
+    release_var: "EPICS_BASE"
+    release_sortkey: "99"
+    add_to_path: true
+    required_debs:
+      - libreadline-dev
+      - libncurses-dev
+      - perl
+      - libperl-dev
+    required_rpms:
+      - readline-devel
+      - ncurses-devel
+      - glibc-devel
+      - perl
+      - perl-devel
+      - perl-Test-Simple
+      - perl-Test-Harness
+      - perl-FindBin
+      - perl-Sys-Hostname
+    pre_hook: "{{ playbook_dir }}/roles/m-base/tasks/base_prep.yml"
+    args: -j {{ ansible_facts.processor_vcpus }}
+
+  - id: pvxs
+    name: "PVXS"
+    version: "{{ pvxs_version }}"
+    url: "https://github.com/epics-base/pvxs/archive/refs/tags/{{ pvxs_version }}.tar.gz"
+    release_var: "PVXS"
+    release_sortkey: "10"
+    add_to_path: true
+    required_debs:
+      - libevent-dev
+      - libxml2-dev
+    required_rpms:
+      - libevent-devel
+      - libxml2-devel
+    args: -j {{ ansible_facts.processor_vcpus }}

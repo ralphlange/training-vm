@@ -1,0 +1,29 @@
+---
+pvapy_version: "5.3.1"
+
+m_pvapy_modules:
+  - id: pvapy
+    name: "pvaPy"
+    version: "{{ pvapy_version }}"
+    url: "https://github.com/epics-base/pvaPy/archive/refs/tags/{{ pvapy_version }}.tar.gz"
+    release_var: "PVAPY"
+    release_sortkey: "10"
+    required_debs:
+      - autoconf
+      - automake
+      - python3-dev
+      - libboost-python-dev
+      - libboost-numpy-dev
+      - python3-sphinx-rtd-theme
+    required_rpms:
+      - autoconf
+      - automake
+      - python3-devel
+      - boost-python3-devel
+      - boost-numpy3
+      - python3-sphinx
+      - python3-sphinx_rtd_theme
+    enable_repos:
+      - crb
+    pre_hook: "{{ playbook_dir }}/roles/m-pvaPy/tasks/pvapy_prep.yml"
+    post_hook: "{{ playbook_dir }}/roles/m-pvaPy/tasks/pvapy_post.yml"

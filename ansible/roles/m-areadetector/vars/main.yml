@@ -1,0 +1,76 @@
+---
+busy_version: "1.7.4"
+sscan_version: "2.11.6"
+calc_version: "3.7.5"
+adcore_version: "3.13"
+adsimdetector_version: "2.11"
+adpvadriver_version: "1.6"
+
+m_areadetector_modules:
+  - id: busy
+    name: "Busy Record"
+    version: "{{ busy_version }}"
+    url: "https://github.com/epics-modules/busy/archive/refs/tags/R{{ busy_version | replace('.', '-') }}.tar.gz"
+    release_var: "BUSY"
+    release_sortkey: "10"
+
+  - id: sscan
+    name: "SScan module"
+    version: "{{ sscan_version }}"
+    url: "https://github.com/epics-modules/sscan/archive/refs/tags/R{{ sscan_version | replace('.', '-') }}.tar.gz"
+    release_var: "SSCAN"
+    release_sortkey: "10"
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/sscan_prep.yml"
+
+  - id: calc
+    name: "Calc module (misc records)"
+    version: "{{ calc_version }}"
+    url: "https://github.com/epics-modules/calc/archive/refs/tags/R{{ calc_version | replace('.', '-') }}.tar.gz"
+    release_var: "CALC"
+    release_sortkey: "10"
+
+  - id: adcore
+    name: "AreaDetector - Core"
+    version: "{{ adcore_version }}"
+    url: "https://github.com/areaDetector/ADCore/archive/refs/tags/R{{ adcore_version | replace('.', '-') }}.tar.gz"
+    release_var: "ADCORE"
+    release_sortkey: "10"
+    required_debs:
+      - zlib1g-dev
+      - libxml2-dev
+      - libtiff-dev
+      - libtiff-tools
+      - libjpeg-dev
+      - libhdf5-dev
+    required_rpms:
+      - zlib-devel
+      - libxml2-devel
+      - libtiff-devel
+      - libtiff-tools
+      - libjpeg-devel
+      - hdf5-devel
+    enable_repos:
+      - crb
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adcore_prep.yml"
+    # Fedora/Rocky 9 libxml2 is too new for Core 3.13 (missing XmlGetGlobal)
+    # Also skip on Ubuntu 24.04 (Noble) as seen in CI failures
+    skip: "{{ ansible_distribution == 'Fedora' or (ansible_distribution == 'Rocky' and ansible_distribution_major_version == '9') or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'noble') }}"
+
+  - id: adsimdetector
+    name: "AreaDetector - SimDetector"
+    version: "{{ adsimdetector_version }}"
+    url: "https://github.com/areaDetector/ADSimDetector/archive/refs/tags/R{{ adsimdetector_version | replace('.', '-') }}.tar.gz"
+    release_var: "ADSIMDETECTOR"
+    release_sortkey: "10"
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adsimdetector_prep.yml"
+    skip: "{{ ansible_distribution == 'Fedora' or (ansible_distribution == 'Rocky' and ansible_distribution_major_version == '9') or (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'noble') }}"
+
+  - id: adpvadriver
+    name: "AreaDetector - pvaDriver"
+    version: "{{ adpvadriver_version }}"
+    url: "https://github.com/areaDetector/pvaDriver/archive/refs/tags/R{{ adpvadriver_version | replace('.', '-') }}.tar.gz"
+    release_var: "PVADRIVER"
+    release_sortkey: "10"
+    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/adpvadriver_prep.yml"
+    # only build on Rocky < 9 and non-Noble Ubuntu (though it was only Rocky originally)
+    skip: "{{ ansible_distribution != 'Rocky' or ansible_distribution_major_version == '9' }}"

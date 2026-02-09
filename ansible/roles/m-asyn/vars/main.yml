@@ -1,0 +1,19 @@
+---
+asyn_version: "4.44.2"
+
+m_asyn_modules:
+  - id: asyn
+    name: "ASYN"
+    version: "{{ asyn_version }}"
+    url: "https://github.com/epics-modules/asyn/archive/refs/tags/R{{ asyn_version | replace('.', '-') }}.tar.gz"
+    release_var: "ASYN"
+    release_sortkey: "10"
+    required_debs:
+      - libtirpc-dev
+    required_rpms:
+      - rpcgen
+      - libtirpc-devel
+    enable_repos:
+      - crb
+    pre_hook: "{{ playbook_dir }}/roles/m-asyn/tasks/asyn_prep.yml"
+    args: -j {{ ansible_facts.processor_vcpus }}

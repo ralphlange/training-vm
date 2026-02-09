@@ -1,0 +1,6 @@
+---
+- name: "{{ module.name }} | Build the documentation"
+  ansible.builtin.shell: |
+    PYTHONPATH=../../lib/python/{{ ansible_facts['python_version'] }}/linux-x86_64
+    make -C "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}" doc
+  become: true

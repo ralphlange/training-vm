@@ -1,0 +1,26 @@
+---
+- name: "{{ module.name }} | Fix configure/RELEASE to include RELEASE.local"
+  ansible.builtin.lineinfile:
+    path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE"
+    regexp: '^\s*-include\s+\$\(TOP\)/RELEASE.local'
+    line: '-include $(TOP)/../RELEASE.local'
+  become: true
+
+- name: "{{ module.name }} | Fix example IOC configure/RELEASE to include RELEASE.local"
+  ansible.builtin.lineinfile:
+    path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocs/simDetectorIOC/configure/RELEASE"
+    regexp: '^\s*-include\s+\$\(TOP\)/RELEASE.local'
+    line: '-include $(TOP)/../RELEASE.local'
+  become: true
+
+- name: "{{ module.name }} | Make example IOC include ADCORE/configure/CONFIG_SITE"
+  ansible.builtin.lineinfile:
+    path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocs/simDetectorIOC/configure/CONFIG_SITE"
+    line: '-include $(ADCORE)/configure/CONFIG_SITE'
+  become: true
+
+- name: "{{ module.name }} | Fix location of XML schema in XML files"
+  ansible.builtin.shell:
+    cmd: sed -si "s|../../../../../ADCore/|{{ epics_install_path }}/adcore-{{ adcore_version }}/|" *.xml
+    chdir: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/iocs/simDetectorIOC/iocBoot/iocSimDetector"
+  become: true

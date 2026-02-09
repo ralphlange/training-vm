@@ -5,39 +5,71 @@
   roles:
     - role: initial_setup
       tags: initial_setup
-      when: initial_setup | bool
+      when: initial_setup | default(false) | bool
 
     - role: catrust
       tags: catrust
-      when: catrust | bool
+      when: catrust | default(false) | bool
 
     - role: common #  <- mandatory
       tags: common
 
+    - role: m-base
+      tags: m-base
+      when: m_base | default(false) | bool
+
+    - role: m-areadetector
+      tags: m-areadetector
+      when: m_areadetector | default(false) | bool
+
+    - role: m-asyn
+      tags: m-asyn
+      when: m_asyn | default(false) | bool
+
+    - role: m-autosave
+      tags: m-autosave
+      when: m_autosave | default(false) | bool
+
+    - role: m-opcua
+      tags: m-opcua
+      when: m_opcua | default(false) | bool
+
+    - role: m-p4p
+      tags: m-p4p
+      when: m_p4p | default(false) | bool
+
+    - role: m-pvaPy
+      tags: m-pvaPy
+      when: m_pvaPy | default(false) | bool
+
+    - role: m-seq
+      tags: m-seq
+      when: m_seq | default(false) | bool
+
+    - role: m-stream
+      tags: m-stream
+      when: m_stream | default(false) | bool
+
     - role: docker
       tags: docker
-      when: docker | bool
+      when: docker | default(false) | bool
 
     - role: bluesky
       tags: bluesky
-      when: bluesky | bool
+      when: bluesky | default(false) | bool
       become: true
       become_user: "{{ dev_user}}"
 
-    - role: epics-modules
-      tags: epics_modules
-      when: epics_modules_build | bool
-
     - role: epics-tools
       tags: epics_tools
-      when: epics_tools | bool
+      when: epics_tools | default(false) | bool
 
     - role: oac-tree
       tags: oac_tree
-      when: oac_tree | bool
+      when: oac_tree | default(false) | bool
 
     - role: archiver-appliance
       tags: archiver_appliance
-      when: archiver_appliance | bool
+      when: archiver_appliance | default(false) | bool
 
   environment: "{{ proxy_env }}"
