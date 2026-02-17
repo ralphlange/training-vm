@@ -1,8 +1,9 @@
 ---
+allow_duplicates: true
 dependencies:
   - role: m-asyn
   - role: m-autosave
   - role: m-pvaPy
-  - role: m-calc
   - role: m-sscan
+  - role: m-calc
   - role: m-busy

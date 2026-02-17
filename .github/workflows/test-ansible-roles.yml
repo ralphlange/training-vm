@@ -48,7 +48,7 @@ jobs:
             id: "ci-stream-opcua"
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository }}/epics-training-base-${{ matrix.distro }}:latest
+      image: ghcr.io/ralphlange/training-vm/epics-training-base-${{ matrix.distro }}:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4

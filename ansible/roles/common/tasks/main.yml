@@ -31,3 +31,9 @@
     content: "SUPPORT={{ epics_install_path }}\n"
     dest: "{{ epics_install_path }}/RELEASE.local.d/00-support"
   become: true
+
+- name: Initial assemble of RELEASE.local
+  assemble:
+    src: "{{ epics_install_path }}/RELEASE.local.d"
+    dest: "{{ epics_install_path }}/RELEASE.local"
+  become: true
