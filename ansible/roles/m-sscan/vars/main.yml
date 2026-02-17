@@ -1,0 +1,11 @@
+---
+sscan_version: "2.11.6"
+
+m_sscan_modules:
+  - id: sscan
+    name: "SScan module"
+    version: "{{ sscan_version }}"
+    url: "https://github.com/epics-modules/sscan/archive/refs/tags/R{{ sscan_version | replace('.', '-') }}.tar.gz"
+    release_var: "SSCAN"
+    release_sortkey: "10"
+    pre_hook: "{{ playbook_dir }}/roles/m-sscan/tasks/sscan_prep.yml"

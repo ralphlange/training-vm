@@ -1,34 +1,9 @@
 ---
-busy_version: "1.7.4"
-sscan_version: "2.11.6"
-calc_version: "3.7.5"
 adcore_version: "3.13"
 adsimdetector_version: "2.11"
 adpvadriver_version: "1.6"
 
 m_areadetector_modules:
-  - id: busy
-    name: "Busy Record"
-    version: "{{ busy_version }}"
-    url: "https://github.com/epics-modules/busy/archive/refs/tags/R{{ busy_version | replace('.', '-') }}.tar.gz"
-    release_var: "BUSY"
-    release_sortkey: "10"
-
-  - id: sscan
-    name: "SScan module"
-    version: "{{ sscan_version }}"
-    url: "https://github.com/epics-modules/sscan/archive/refs/tags/R{{ sscan_version | replace('.', '-') }}.tar.gz"
-    release_var: "SSCAN"
-    release_sortkey: "10"
-    pre_hook: "{{ playbook_dir }}/roles/m-areadetector/tasks/sscan_prep.yml"
-
-  - id: calc
-    name: "Calc module (misc records)"
-    version: "{{ calc_version }}"
-    url: "https://github.com/epics-modules/calc/archive/refs/tags/R{{ calc_version | replace('.', '-') }}.tar.gz"
-    release_var: "CALC"
-    release_sortkey: "10"
-
   - id: adcore
     name: "AreaDetector - Core"
     version: "{{ adcore_version }}"

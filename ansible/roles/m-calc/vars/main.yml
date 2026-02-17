@@ -1,0 +1,10 @@
+---
+calc_version: "3.7.5"
+
+m_calc_modules:
+  - id: calc
+    name: "Calc module (misc records)"
+    version: "{{ calc_version }}"
+    url: "https://github.com/epics-modules/calc/archive/refs/tags/R{{ calc_version | replace('.', '-') }}.tar.gz"
+    release_var: "CALC"
+    release_sortkey: "10"
