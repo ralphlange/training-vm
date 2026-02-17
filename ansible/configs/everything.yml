@@ -4,6 +4,9 @@
 # For use in VMs, does not work in containers
 
 m_base: true
+m_calc: true
+m_sscan: true
+m_busy: true
 m_p4p: true
 m_pvaPy: true
 m_seq: true

@@ -3,6 +3,9 @@
 # It has a few differences from everything.yml (see comments inline)
 
 m_base: true
+m_calc: true
+m_sscan: true
+m_busy: true
 m_p4p: true
 m_pvaPy: true
 m_seq: true

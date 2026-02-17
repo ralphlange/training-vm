@@ -12,6 +12,10 @@ bluesky: false
 
 m_base: true
 
+is_debian: "{{ ansible_facts['os_family'] == 'Debian' }}"
+is_redhat: "{{ ansible_facts['os_family'] == 'RedHat' }}"
+dev_user: "epics-dev"
+
 # Default: false proxy
 proxy_env: {}
 

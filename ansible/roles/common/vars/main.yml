@@ -4,10 +4,3 @@ epics_install_path: "/opt/epics"
 opi_install_path: "/opt/opi"
 
 epics_services_account: root
-
-is_debian: "{{ ansible_os_family == 'Debian' }}"
-is_redhat: "{{ ansible_os_family == 'RedHat' }}"
-
-# Default proxy settings (empty)
-proxy_env: {}
-dev_user: vagrant
