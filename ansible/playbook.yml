@@ -15,101 +15,123 @@
       include_role:
         name: initial_setup
       when: initial_setup | default(false) | bool
+      tags: initial_setup
 
     - name: CA trust
       include_role:
         name: catrust
       when: catrust | default(false) | bool
+      tags: catrust
 
     - name: Common setup
       include_role:
         name: common
+      tags: common
 
     - name: EPICS Base
       include_role:
         name: m-base
       when: m_base | default(false) | bool
+      tags: m-base
 
     - name: ASYN
       include_role:
         name: m-asyn
       when: m_asyn | default(false) | bool
+      tags: m-asyn
 
     - name: Autosave
       include_role:
         name: m-autosave
       when: m_autosave | default(false) | bool
+      tags: m-autosave
 
     - name: SScan
       include_role:
         name: m-sscan
       when: m_sscan | default(false) | bool
+      tags: m-sscan
 
     - name: Calc
       include_role:
         name: m-calc
       when: m_calc | default(false) | bool
+      tags: m-calc
 
     - name: Busy
       include_role:
         name: m-busy
       when: m_busy | default(false) | bool
+      tags: m-busy
 
     - name: AreaDetector
       include_role:
         name: m-areadetector
       when: m_areadetector | default(false) | bool
+      tags: m-areadetector
 
     - name: OPC UA
       include_role:
         name: m-opcua
       when: m_opcua | default(false) | bool
+      tags: m-opcua
 
     - name: P4P
       include_role:
         name: m-p4p
       when: m_p4p | default(false) | bool
+      tags: m-p4p
 
     - name: pvaPy
       include_role:
         name: m-pvaPy
       when: m_pvaPy | default(false) | bool
+      tags: m-pvaPy
 
     - name: Sequencer
       include_role:
         name: m-seq
       when: m_seq | default(false) | bool
+      tags: m-seq
 
     - name: StreamDevice
       include_role:
         name: m-stream
       when: m_stream | default(false) | bool
+      tags: m-stream
 
     - name: Docker
       include_role:
         name: docker
       when: docker | default(false) | bool
+      tags: docker
 
     - name: Bluesky
-      include_role:
-        name: bluesky
       when: bluesky | default(false) | bool
       become: true
-      become_user: "{{ dev_user}}"
+      become_user: "{{ dev_user }}"
+      tags: bluesky
+      block:
+        - name: Run Bluesky role
+          include_role:
+            name: bluesky
 
     - name: EPICS Tools
       include_role:
         name: epics-tools
       when: epics_tools | default(false) | bool
+      tags: epics_tools
 
     - name: OAC Tree
       include_role:
         name: oac-tree
       when: oac_tree | default(false) | bool
+      tags: oac_tree
 
     - name: Archiver Appliance
       include_role:
         name: archiver-appliance
       when: archiver_appliance | default(false) | bool
+      tags: archiver_appliance
 
   environment: "{{ proxy_env }}"

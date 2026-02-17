@@ -7,4 +7,4 @@ m_busy_modules:
     version: "{{ busy_version }}"
     url: "https://github.com/epics-modules/busy/archive/refs/tags/R{{ busy_version | replace('.', '-') }}.tar.gz"
     release_var: "BUSY"
-    release_sortkey: "10"
+    release_sortkey: "20"
