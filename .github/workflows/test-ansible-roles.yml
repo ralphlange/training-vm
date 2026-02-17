@@ -1,0 +1,58 @@
+name: Test Ansible Roles
+
+on:
+  push:
+    branches:
+      - main
+      - parallel-ci-pipelines
+    paths:
+      - '.github/workflows/test-ansible-roles.yml'
+      - 'ansible/roles/**'
+      - 'ansible/configs/ci-*.yml'
+      - 'ansible/playbook.yml'
+      - 'ansible/requirements.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/test-ansible-roles.yml'
+      - 'ansible/roles/**'
+      - 'ansible/configs/ci-*.yml'
+      - 'ansible/playbook.yml'
+      - 'ansible/requirements.yml'
+  workflow_run:
+    workflows: ["Rebuild Container Images"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  check:
+    uses: ./.github/workflows/_check.yml
+
+  test:
+    needs: check
+    if: |
+      needs.check.outputs.branch-pr == '' &&
+      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [ubuntu, rocky, debian, fedora]
+        conf:
+          - name: "areaDetector"
+            id: "ci-areadetector"
+          - name: "oac-tree"
+            id: "ci-oac-tree"
+          - name: "Phoebus & Archiver"
+            id: "ci-phoebus-aa"
+          - name: "streamDevice & opcua"
+            id: "ci-stream-opcua"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}/epics-training-base-${{ matrix.distro }}:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build ${{ matrix.conf.name }}
+        run: |
+          cd ansible
+          ansible-playbook -v playbook.yml -e "setup=${{ matrix.conf.id }}"

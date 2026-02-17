@@ -1,0 +1,10 @@
+---
+# Overrides for CI testing on GitHub Actions
+
+# OAC Tree and dependencies
+
+m_stream: true
+m_autosave: true
+oac_tree: true
+
+in_container: true

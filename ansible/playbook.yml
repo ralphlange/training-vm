@@ -2,6 +2,14 @@
 - name: Set up training VM
   hosts: local
 
+  vars:
+    # default configuration file if not specified on the CLI
+    setup: "local"
+
+  # Load the configuration based on the 'setup' variable
+  vars_files:
+    - "configs/{{ setup }}.yml"
+
   roles:
     - role: initial_setup
       tags: initial_setup
