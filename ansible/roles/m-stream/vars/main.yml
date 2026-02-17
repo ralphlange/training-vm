@@ -7,6 +7,6 @@ m_stream_modules:
     version: "{{ stream_version }}"
     url: "https://github.com/paulscherrerinstitute/StreamDevice/archive/refs/tags/{{ stream_version }}.tar.gz"
     release_var: "STREAM"
-    release_sortkey: "10"
+    release_sortkey: "30"
     pre_hook: "{{ playbook_dir }}/roles/m-stream/tasks/stream_prep.yml"
     args: -j {{ ansible_facts.processor_vcpus }}
