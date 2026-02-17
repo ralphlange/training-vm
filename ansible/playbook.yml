@@ -6,6 +6,10 @@
     # default configuration file if not specified on the CLI
     setup: "local"
 
+    is_debian: "{{ ansible_os_family == 'Debian' }}"
+    is_redhat: "{{ ansible_os_family == 'RedHat' }}"
+    dev_user: "vagrant"
+
   # Load the configuration based on the 'setup' variable
   vars_files:
     - "configs/{{ setup }}.yml"
@@ -25,6 +29,18 @@
     - role: m-base
       tags: m-base
       when: m_base | default(false) | bool
+
+    - role: m-calc
+      tags: m-calc
+      when: m_calc | default(false) | bool
+
+    - role: m-sscan
+      tags: m-sscan
+      when: m_sscan | default(false) | bool
+
+    - role: m-busy
+      tags: m-busy
+      when: m_busy | default(false) | bool
 
     - role: m-areadetector
       tags: m-areadetector

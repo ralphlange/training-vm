@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name: "{{ module.required_debs }}"
     state: present
+    update_cache: true
   become: true
   when: is_debian and module.required_debs is defined
 
@@ -65,6 +66,13 @@
         path: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE"
         state: absent
         regexp: "^SUPPORT="
+      become: true
+
+    - name: "{{ module.name }} rebuild | Link RELEASE.local"
+      ansible.builtin.file:
+        src: "{{ epics_install_path }}/RELEASE.local"
+        dest: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE.local"
+        state: link
       become: true
 
     - name: "{{ module.name }} rebuild | Run pre-build hook"

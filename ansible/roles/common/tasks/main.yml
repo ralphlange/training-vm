@@ -25,3 +25,9 @@
     - "{{ epics_install_path }}/epics-tools.sh.d"
     - "{{ epics_install_path }}/.flag"
     - "{{ opi_install_path }}"
+
+- name: Create SUPPORT fragment for RELEASE.local
+  copy:
+    content: "SUPPORT={{ epics_install_path }}\n"
+    dest: "{{ epics_install_path }}/RELEASE.local.d/00-support"
+  become: true

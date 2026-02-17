@@ -1,0 +1,11 @@
+---
+- name: Install busy and dependencies
+  include_role:
+    name: epics-module
+  vars:
+    epics_modules_to_build: "{{ m_busy_modules }}"
+  when: not (m_busy_installed | default(false))
+
+- name: Mark m-busy as installed
+  set_fact:
+    m_busy_installed: true
