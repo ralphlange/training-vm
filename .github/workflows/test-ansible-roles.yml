@@ -11,6 +11,12 @@ on:
       - 'ansible/configs/ci-*.yml'
       - 'ansible/playbook.yml'
       - 'ansible/requirements.yml'
+    paths-ignore:
+      - 'ansible/roles/initial_setup/**'
+      - 'ansible/roles/catrust/**'
+      - 'ansible/roles/common/**'
+      - 'ansible/roles/m-base/**'
+      - 'ansible/roles/epics-module/**'
   pull_request:
     paths:
       - '.github/workflows/test-ansible-roles.yml'
@@ -18,6 +24,12 @@ on:
       - 'ansible/configs/ci-*.yml'
       - 'ansible/playbook.yml'
       - 'ansible/requirements.yml'
+    paths-ignore:
+      - 'ansible/roles/initial_setup/**'
+      - 'ansible/roles/catrust/**'
+      - 'ansible/roles/common/**'
+      - 'ansible/roles/m-base/**'
+      - 'ansible/roles/epics-module/**'
   workflow_run:
     workflows: ["Rebuild Container Images"]
     types:
@@ -48,7 +60,7 @@ jobs:
             id: "ci-stream-opcua"
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/ralphlange/training-vm/epics-training-base-${{ matrix.distro }}:latest
+      image: ghcr.io/${{ github.repository }}/epics-training-base-${{ matrix.distro }}:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
