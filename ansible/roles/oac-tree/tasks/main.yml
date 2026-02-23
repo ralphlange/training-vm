@@ -113,7 +113,7 @@
   become: true
   when: oactree_bundle_flag.stat.exists == false
 
-- name: "Run make (this may take a while)"
+- name: "Run make (build and install everything - this may take a while)"
   command: make -j {{ ansible_facts.processor_vcpus }} -C {{ oactree_install_path }}/src/oac-tree-bundle/build
   register: build_result
   environment:
@@ -123,16 +123,6 @@
     CMAKE_PREFIX_PATH: "{{ oactree_install_path }}"
   become: true
   when: oactree_bundle_flag.stat.exists == false
-
-- name: "Run make install"
-  command: make -C {{ oactree_install_path }}/src/oac-tree-bundle/build install
-  environment:
-    EPICS_BASE: /opt/epics/base-7.0.9
-    EPICS_HOST_ARCH: "linux-{{ ansible_facts['architecture'] }}"
-    PVXS_DIR: /opt/epics/pvxs-1.3.1
-    CMAKE_PREFIX_PATH: "{{ oactree_install_path }}"
-  become: true
-  when: oactree_bundle_flag.stat.exists == false and build_result.rc | default(0) == 0
 
 - name: "Update linker configuration"
   ansible.builtin.command: ldconfig
