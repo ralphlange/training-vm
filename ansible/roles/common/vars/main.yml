@@ -4,3 +4,6 @@ epics_install_path: "/opt/epics"
 opi_install_path: "/opt/opi"
 
 epics_services_account: root
+
+epics_base_version: "7.0.9"
+pvxs_version: "1.3.1"
