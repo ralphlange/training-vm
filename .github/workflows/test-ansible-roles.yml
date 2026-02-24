@@ -40,8 +40,16 @@ jobs:
   check:
     uses: ./.github/workflows/_check.yml
 
+  prep:
+    runs-on: ubuntu-latest
+    outputs:
+      repo_name: ${{ steps.lowercase.outputs.repo_name }}
+    steps:
+      - id: lowercase
+        run: echo "repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
   test:
-    needs: check
+    needs: [check, prep]
     if: |
       needs.check.outputs.branch-pr == '' &&
       (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
@@ -60,7 +68,7 @@ jobs:
             id: "ci-stream-opcua"
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository }}/epics-training-base-${{ matrix.distro }}:latest
+      image: ghcr.io/${{ needs.prep.outputs.repo_name }}/epics-training-base-${{ matrix.distro }}:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
