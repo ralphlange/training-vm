@@ -17,16 +17,17 @@
       when: initial_setup | default(false) | bool
       tags: initial_setup
 
+    - name: Check distro has been identified
+      ansible.builtin.assert:
+        that:
+          - is_debian or is_redhat
+        fail_msg: "Unkown distro {{ ansible_facts['distribution'] }}"
+
     - name: CA trust
       include_role:
         name: catrust
       when: catrust | default(false) | bool
       tags: catrust
-
-    - name: Common setup
-      include_role:
-        name: common
-      tags: common
 
     - name: EPICS Base
       include_role:

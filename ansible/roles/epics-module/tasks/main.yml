@@ -1,4 +1,17 @@
 ---
+- name: Create installation directories
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: "0755"
+  become: true
+  loop:
+    - "{{ epics_install_path }}"
+    - "{{ epics_install_path }}/RELEASE.local.d"
+    - "{{ epics_install_path }}/epics-tools.sh.d"
+    - "{{ epics_install_path }}/.flag"
+    - "{{ opi_install_path }}"
+
 - name: Build EPICS Modules
   include_tasks: build_module.yml
   loop: "{{ epics_modules_to_build }}"

@@ -7,3 +7,5 @@ phoebus_owner: "root"
 force_gpu: false
 
 mvn_home: "/opt/epics-tools/lib/apache-maven"
+
+epics_services_account: root
