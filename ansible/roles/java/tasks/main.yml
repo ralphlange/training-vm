@@ -21,6 +21,7 @@
     path: "{{ ca_trust_der_path }}"
   register: ca_cert_der
   changed_when: false
+  when: ca_trust_der_path is defined
 
 - name: Add CA certificate to java trust store
   community.general.java_cert:
@@ -33,4 +34,4 @@
   become: true
   environment:
     PATH: "{{ java_home }}/bin:{{ ansible_env.PATH }}"
-  when: ca_cert_der.stat.exists
+  when: ca_trust_der_path is defined and ca_cert_der.stat.exists
