@@ -10,18 +10,30 @@
   vars_files:
     - "configs/{{ setup }}.yml"
 
+  pre_tasks:
+    - name: Load OS-specific variables with fallback
+      ansible.builtin.include_vars: "{{ item }}"
+      with_first_found:
+        - files:
+            - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_major_version'] }}.yml"
+            - "{{ ansible_facts['distribution'] }}.yml"
+            - "{{ ansible_facts['os_family'] }}.yml"
+            - "default.yml"
+          paths:
+            - vars/os
+      tags: always
+
   tasks:
+    - name: Check that distro has been identified
+      ansible.builtin.fail:
+        msg: "Unsupported distro {{ ansible_facts['distribution'] }}."
+      when: is_debian == false and is_redhat == false
+
     - name: Initial setup
       include_role:
         name: initial_setup
       when: initial_setup | default(false) | bool
       tags: initial_setup
-
-    - name: Check distro has been identified
-      ansible.builtin.assert:
-        that:
-          - is_debian or is_redhat
-        fail_msg: "Unkown distro {{ ansible_facts['distribution'] }}"
 
     - name: CA trust
       include_role:
