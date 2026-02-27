@@ -1,4 +1,5 @@
 # Dependencies for epics-tools
 ---
+allow_duplicates: true
 dependencies:
   - role: java

@@ -1,0 +1,10 @@
+---
+# Overrides for CI testing on GitHub Actions
+
+# streamDevice and opcua
+
+m_base: true
+m_stream: true
+m_opcua: true
+
+in_container: true

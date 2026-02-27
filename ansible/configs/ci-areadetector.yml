@@ -1,0 +1,10 @@
+---
+# Overrides for CI testing on GitHub Actions
+
+# areaDetector and dependencies
+
+m_base: true
+m_areadetector: true
+m_seq: true
+
+in_container: true

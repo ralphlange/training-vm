@@ -2,66 +2,136 @@
 - name: Set up training VM
   hosts: local
 
-  roles:
-    - role: initial_setup
-      tags: initial_setup
+  vars:
+    # default configuration file if not specified on the CLI
+    setup: "local"
+
+  # Load the configuration based on the 'setup' variable
+  vars_files:
+    - "configs/{{ setup }}.yml"
+
+  tasks:
+    - name: Initial setup
+      include_role:
+        name: initial_setup
       when: initial_setup | default(false) | bool
+      tags: initial_setup
 
-    - role: catrust
-      tags: catrust
+    - name: CA trust
+      include_role:
+        name: catrust
       when: catrust | default(false) | bool
+      tags: catrust
 
-    - role: common #  <- mandatory
+    - name: Common setup
+      include_role:
+        name: common
       tags: common
 
-    - role: m-base
-      tags: m-base
+    - name: EPICS Base
+      include_role:
+        name: m-base
       when: m_base | default(false) | bool
+      tags: m-base
 
-    - role: m-areadetector
-      tags: m-areadetector
+    - name: ASYN
+      include_role:
+        name: m-asyn
+      when: m_asyn | default(false) | bool
+      tags: m-asyn
+
+    - name: Autosave
+      include_role:
+        name: m-autosave
+      when: m_autosave | default(false) | bool
+      tags: m-autosave
+
+    - name: SScan
+      include_role:
+        name: m-sscan
+      when: m_sscan | default(false) | bool
+      tags: m-sscan
+
+    - name: Calc
+      include_role:
+        name: m-calc
+      when: m_calc | default(false) | bool
+      tags: m-calc
+
+    - name: Busy
+      include_role:
+        name: m-busy
+      when: m_busy | default(false) | bool
+      tags: m-busy
+
+    - name: AreaDetector
+      include_role:
+        name: m-areadetector
       when: m_areadetector | default(false) | bool
+      tags: m-areadetector
 
-    - role: m-opcua
-      tags: m-opcua
+    - name: OPC UA
+      include_role:
+        name: m-opcua
       when: m_opcua | default(false) | bool
+      tags: m-opcua
 
-    - role: m-p4p
-      tags: m-p4p
+    - name: P4P
+      include_role:
+        name: m-p4p
       when: m_p4p | default(false) | bool
+      tags: m-p4p
 
-    - role: m-pvaPy
-      tags: m-pvaPy
+    - name: pvaPy
+      include_role:
+        name: m-pvaPy
       when: m_pvaPy | default(false) | bool
+      tags: m-pvaPy
 
-    - role: m-seq
-      tags: m-seq
+    - name: Sequencer
+      include_role:
+        name: m-seq
       when: m_seq | default(false) | bool
+      tags: m-seq
 
-    - role: m-stream
-      tags: m-stream
+    - name: StreamDevice
+      include_role:
+        name: m-stream
       when: m_stream | default(false) | bool
+      tags: m-stream
 
-    - role: docker
-      tags: docker
+    - name: Docker
+      include_role:
+        name: docker
       when: docker | default(false) | bool
+      tags: docker
 
-    - role: bluesky
-      tags: bluesky
+    - name: Bluesky
       when: bluesky | default(false) | bool
       become: true
-      become_user: "{{ dev_user}}"
+      become_user: "{{ dev_user }}"
+      tags: bluesky
+      block:
+        - name: Run Bluesky role
+          include_role:
+            name: bluesky
 
-    - role: epics-tools
-      tags: epics_tools
+    - name: EPICS Tools
+      include_role:
+        name: epics-tools
       when: epics_tools | default(false) | bool
+      tags: epics_tools
 
-    - role: oac-tree
-      tags: oac_tree
+    - name: OAC Tree
+      include_role:
+        name: oac-tree
       when: oac_tree | default(false) | bool
+      tags: oac_tree
 
-    - role: archiver-appliance
-      tags: archiver_appliance
+    - name: Archiver Appliance
+      include_role:
+        name: archiver-appliance
       when: archiver_appliance | default(false) | bool
+      tags: archiver_appliance
 
   environment: "{{ proxy_env }}"
