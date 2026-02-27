@@ -1,4 +1,5 @@
 ---
+allow_duplicates: true
 dependencies:
   - role: m-base
   - role: m-asyn

@@ -1,0 +1,80 @@
+name: Rebuild Container Images
+
+on:
+  push:
+    branches:
+      - main
+      - parallel-ci-pipelines
+    paths:
+      - '.github/workflows/rebuild-container-images.yml'
+      - '.github/workflows/Containerfile.*'
+      - 'ansible/roles/initial_setup/**'
+      - 'ansible/roles/catrust/**'
+      - 'ansible/roles/common/**'
+      - 'ansible/roles/m-base/**'
+      - 'ansible/roles/epics-module/**'
+      - 'ansible/configs/ci-base-image.yml'
+      - 'ansible/playbook.yml'
+      - 'ansible/requirements.yml'
+      - 'initial_setup.sh'
+      - 'update.sh'
+  pull_request:
+    paths:
+      - '.github/workflows/rebuild-container-images.yml'
+      - '.github/workflows/Containerfile.*'
+      - 'ansible/roles/initial_setup/**'
+      - 'ansible/roles/catrust/**'
+      - 'ansible/roles/common/**'
+      - 'ansible/roles/m-base/**'
+      - 'ansible/roles/epics-module/**'
+      - 'ansible/configs/ci-base-image.yml'
+      - 'ansible/playbook.yml'
+      - 'ansible/requirements.yml'
+      - 'initial_setup.sh'
+      - 'update.sh'
+  workflow_dispatch:
+
+jobs:
+  check:
+    uses: ./.github/workflows/_check.yml
+
+  build:
+    needs: check
+    if: needs.check.outputs.branch-pr == ''
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distro: ubuntu
+            image: 'ubuntu:24.04'
+          - distro: rocky
+            image: 'rockylinux:9'
+          - distro: debian
+            image: 'debian:bookworm'
+          - distro: fedora
+            image: 'fedora:41'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set lower case repository name
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+      - name: Build and push container image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./.github/workflows/Containerfile.${{ matrix.distro }}
+          build-args: |
+            IMAGE=${{ matrix.image }}
+          push: true
+          tags: ghcr.io/${{ env.REPO_NAME }}/epics-training-base-${{ matrix.distro }}:latest

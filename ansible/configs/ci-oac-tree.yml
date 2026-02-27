@@ -1,0 +1,9 @@
+---
+# Overrides for CI testing on GitHub Actions
+
+# OAC Tree and dependencies
+
+m_base: true
+oac_tree: true
+
+in_container: true

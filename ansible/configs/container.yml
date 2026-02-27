@@ -1,0 +1,27 @@
+---
+# Overrides for running in containers
+# It has a few differences from everything.yml (see comments inline)
+
+m_base: true
+m_calc: true
+m_sscan: true
+m_busy: true
+m_p4p: true
+m_pvaPy: true
+m_seq: true
+m_opcua: true
+m_stream: true
+m_areadetector: true
+
+#catrust: true
+epics_tools: true
+#oac_tree: true
+#archiver_appliance: true
+#docker: true
+# the attempt to make docker outside docker work is a failure because the
+# compose file tries to mount host folders it cannot see. For the moment
+# disable buesky build in containers
+bluesky: false
+
+# tell ansible that we are in a container instead of VM
+in_container: true
