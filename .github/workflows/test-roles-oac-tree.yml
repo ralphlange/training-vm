@@ -1,0 +1,63 @@
+name: "Test Roles: oac-tree"
+
+on:
+  push:
+    branches:
+      - main
+      - 'parallel-ci-pipelines*'
+    paths:
+      - '.github/workflows/test-roles-oac-tree.yml'
+      - 'ansible/configs/ci-*.yml'
+      - 'ansible/playbook.yml'
+      - 'ansible/requirements.yml'
+      - 'ansible/roles/m-base/**'
+      - 'ansible/roles/oac-tree/**'
+  pull_request:
+    paths:
+    - '.github/workflows/test-roles-oac-tree.yml'
+    - 'ansible/configs/ci-*.yml'
+    - 'ansible/playbook.yml'
+    - 'ansible/requirements.yml'
+    - 'ansible/roles/m-base/**'
+    - 'ansible/roles/oac-tree/**'
+  workflow_run:
+    workflows: ["Rebuild Container Images"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  check:
+    uses: ./.github/workflows/_check.yml
+
+  prep:
+    runs-on: ubuntu-latest
+    outputs:
+      repo_name: ${{ steps.lowercase.outputs.repo_name }}
+    steps:
+      - id: lowercase
+        run: echo "repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+
+  test:
+    needs: [check, prep]
+    name: "${{ matrix.distro }}: ${{ matrix.conf.name }}"
+    if: |
+      needs.check.outputs.branch-pr == '' &&
+      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [ubuntu, rocky, debian, fedora]
+        conf:
+          - name: "oac-tree"
+            id: "ci-oac-tree"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ needs.prep.outputs.repo_name }}/epics-training-base-${{ matrix.distro }}:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Build ${{ matrix.conf.name }}
+        run: |
+          cd ansible
+          ansible-playbook -v playbook.yml -e "setup=${{ matrix.conf.id }}"
