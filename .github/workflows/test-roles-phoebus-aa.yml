@@ -1,4 +1,4 @@
-name: Test Ansible Roles
+name: "Test Roles: Phoebus & AA"
 
 on:
   push:
@@ -6,28 +6,20 @@ on:
       - main
       - 'parallel-ci-pipelines*'
     paths:
-      - '.github/workflows/test-ansible-roles.yml'
+      - '.github/workflows/test-roles-phoebus-aa.yml'
       - 'ansible/configs/ci-*.yml'
       - 'ansible/playbook.yml'
       - 'ansible/requirements.yml'
-      - 'ansible/roles/**'
-      - '!ansible/roles/initial_setup/**'
-      - '!ansible/roles/catrust/**'
-      - '!ansible/roles/common/**'
-      - '!ansible/roles/m-base/**'
-      - '!ansible/roles/epics-module/**'
+      - 'ansible/roles/epics-tools/**'
+      - 'ansible/roles/java/**'
   pull_request:
     paths:
-      - '.github/workflows/test-ansible-roles.yml'
-      - 'ansible/configs/ci-*.yml'
-      - 'ansible/playbook.yml'
-      - 'ansible/requirements.yml'
-      - 'ansible/roles/**'
-      - '!ansible/roles/initial_setup/**'
-      - '!ansible/roles/catrust/**'
-      - '!ansible/roles/common/**'
-      - '!ansible/roles/m-base/**'
-      - '!ansible/roles/epics-module/**'
+    - '.github/workflows/test-roles-phoebus-aa.yml'
+    - 'ansible/configs/ci-*.yml'
+    - 'ansible/playbook.yml'
+    - 'ansible/requirements.yml'
+    - 'ansible/roles/epics-tools/**'
+    - 'ansible/roles/java/**'
   workflow_run:
     workflows: ["Rebuild Container Images"]
     types:
@@ -57,14 +49,8 @@ jobs:
       matrix:
         distro: [ubuntu, rocky, debian, fedora]
         conf:
-          - name: "areaDetector"
-            id: "ci-areadetector"
-          - name: "oac-tree"
-            id: "ci-oac-tree"
           - name: "Phoebus & Archiver"
             id: "ci-phoebus-aa"
-          - name: "streamDevice & opcua"
-            id: "ci-stream-opcua"
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/${{ needs.prep.outputs.repo_name }}/epics-training-base-${{ matrix.distro }}:latest
