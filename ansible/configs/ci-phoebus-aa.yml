@@ -1,0 +1,10 @@
+---
+# Overrides for CI testing on GitHub Actions
+
+# Phoebus, Archiver Appliance and dependencies
+
+m_base: true
+epics_tools: true
+archiver_appliance: true
+
+in_container: true

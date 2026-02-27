@@ -1,0 +1,21 @@
+# User specific configuration
+#
+# Copy this file to 'local.yml' (which is gitignored) and change as you like
+
+# You can also create other setup files, e.g., 'myVM.yml'
+# and specify them on the ansible-playbook command line:
+# ansible-playbook ... playbook.yml -e "setup=myVM"
+
+# Flag to rebuild everything from source even if it already exists
+# epics_rebuild_all: true
+
+# Modules to be built
+m_base: true
+m_asyn: true
+m_stream: true
+
+# Services
+# epics_tools: true
+# archiver_appliance: true
+# docker: true
+# bluesky: true
