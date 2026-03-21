@@ -1,4 +1,4 @@
-name: Rebuild Container Images
+name: "Rebuild Container Images"
 
 on:
   push:
@@ -9,10 +9,7 @@ on:
       - '.github/workflows/rebuild-container-images.yml'
       - '.github/workflows/Containerfile.*'
       - 'ansible/roles/initial_setup/**'
-      - 'ansible/roles/catrust/**'
-      - 'ansible/roles/common/**'
       - 'ansible/roles/m-base/**'
-      - 'ansible/roles/epics-module/**'
       - 'ansible/configs/ci-base-image.yml'
       - 'ansible/playbook.yml'
       - 'ansible/requirements.yml'
@@ -23,10 +20,7 @@ on:
       - '.github/workflows/rebuild-container-images.yml'
       - '.github/workflows/Containerfile.*'
       - 'ansible/roles/initial_setup/**'
-      - 'ansible/roles/catrust/**'
-      - 'ansible/roles/common/**'
       - 'ansible/roles/m-base/**'
-      - 'ansible/roles/epics-module/**'
       - 'ansible/configs/ci-base-image.yml'
       - 'ansible/playbook.yml'
       - 'ansible/requirements.yml'
