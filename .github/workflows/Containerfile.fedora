@@ -1,4 +1,4 @@
-ARG IMAGE
+ARG IMAGE=fedora:latest
 
 FROM ${IMAGE}
 
