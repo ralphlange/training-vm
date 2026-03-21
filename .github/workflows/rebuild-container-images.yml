@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - parallel-ci-pipelines
+      - 'parallel-ci-pipelines*'
     paths:
       - '.github/workflows/rebuild-container-images.yml'
       - '.github/workflows/Containerfile.*'
