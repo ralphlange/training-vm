@@ -56,7 +56,7 @@ jobs:
       image: ghcr.io/${{ needs.prep.outputs.repo_name }}/epics-training-base-${{ matrix.distro }}:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Build ${{ matrix.conf.name }}
         run: |
           cd ansible
