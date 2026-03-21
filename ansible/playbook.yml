@@ -32,95 +32,95 @@
     - name: Initial setup
       include_role:
         name: initial_setup
-      when: initial_setup | default(false) | bool
+      when: initial_setup is defined and initial_setup | bool
       tags: initial_setup
 
     - name: CA trust
       include_role:
         name: catrust
-      when: catrust | default(false) | bool
+      when: catrust is defined and catrust | bool
       tags: catrust
 
     - name: EPICS Base
       include_role:
         name: m-base
-      when: m_base | default(false) | bool
+      when: m_base is defined and m_base | bool
       tags: m-base
 
     - name: ASYN
       include_role:
         name: m-asyn
-      when: m_asyn | default(false) | bool
+      when: m_asyn is defined and m_asyn | bool
       tags: m-asyn
 
     - name: Autosave
       include_role:
         name: m-autosave
-      when: m_autosave | default(false) | bool
+      when: m_autosave is defined and m_autosave | bool
       tags: m-autosave
 
     - name: SScan
       include_role:
         name: m-sscan
-      when: m_sscan | default(false) | bool
+      when: m_sscan is defined and m_sscan | bool
       tags: m-sscan
 
     - name: Calc
       include_role:
         name: m-calc
-      when: m_calc | default(false) | bool
+      when: m_calc is defined and m_calc | bool
       tags: m-calc
 
     - name: Busy
       include_role:
         name: m-busy
-      when: m_busy | default(false) | bool
+      when: m_busy is defined and m_busy | bool
       tags: m-busy
 
     - name: AreaDetector
       include_role:
         name: m-areadetector
-      when: m_areadetector | default(false) | bool
+      when: m_areadetector is defined and m_areadetector | bool
       tags: m-areadetector
 
     - name: OPC UA
       include_role:
         name: m-opcua
-      when: m_opcua | default(false) | bool
+      when: m_opcua is defined and m_opcua | bool
       tags: m-opcua
 
     - name: P4P
       include_role:
         name: m-p4p
-      when: m_p4p | default(false) | bool
+      when: m_p4p is defined and m_p4p | bool
       tags: m-p4p
 
     - name: pvaPy
       include_role:
         name: m-pvaPy
-      when: m_pvaPy | default(false) | bool
+      when: m_pvaPy is defined and m_pvaPy | bool
       tags: m-pvaPy
 
     - name: Sequencer
       include_role:
         name: m-seq
-      when: m_seq | default(false) | bool
+      when: m_seq is defined and m_seq | bool
       tags: m-seq
 
     - name: StreamDevice
       include_role:
         name: m-stream
-      when: m_stream | default(false) | bool
+      when: m_stream is defined and m_stream | bool
       tags: m-stream
 
     - name: Docker
       include_role:
         name: docker
-      when: docker | default(false) | bool
+      when: docker is defined and docker | bool
       tags: docker
 
     - name: Bluesky
-      when: bluesky | default(false) | bool
+      when: bluesky is defined and bluesky | bool
       become: true
       become_user: "{{ dev_user }}"
       tags: bluesky
@@ -132,19 +132,19 @@
     - name: EPICS Tools
       include_role:
         name: epics-tools
-      when: epics_tools | default(false) | bool
+      when: epics_tools is defined and epics_tools | bool
       tags: epics_tools
 
     - name: OAC Tree
       include_role:
         name: oac-tree
-      when: oac_tree | default(false) | bool
+      when: oac_tree is defined and oac_tree | bool
       tags: oac_tree
 
     - name: Archiver Appliance
       include_role:
         name: archiver-appliance
-      when: archiver_appliance | default(false) | bool
+      when: archiver_appliance is defined and archiver_appliance | bool
       tags: archiver_appliance
 
   environment: "{{ proxy_env }}"
