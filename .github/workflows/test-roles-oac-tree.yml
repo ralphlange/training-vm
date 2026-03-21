@@ -10,7 +10,6 @@ on:
       - 'ansible/configs/ci-*.yml'
       - 'ansible/playbook.yml'
       - 'ansible/requirements.yml'
-      - 'ansible/roles/m-base/**'
       - 'ansible/roles/oac-tree/**'
   pull_request:
     paths:
@@ -18,7 +17,6 @@ on:
     - 'ansible/configs/ci-*.yml'
     - 'ansible/playbook.yml'
     - 'ansible/requirements.yml'
-    - 'ansible/roles/m-base/**'
     - 'ansible/roles/oac-tree/**'
   workflow_run:
     workflows: ["Rebuild Container Images"]
