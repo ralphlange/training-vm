@@ -14,4 +14,4 @@ fi
 
 cd /ansible
 ansible-galaxy install -r requirements.yml || true
-ansible-playbook -e initial_setup=true $ansible_args playbook.yml
+ansible-playbook $ansible_args playbook.yml -e @local.yml -e initial_setup=true

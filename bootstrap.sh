@@ -20,13 +20,13 @@ declare -A REPO BRANCH
 # Read configuration file "$1", ./bootstrap_setup or ~/bootstrap_setup
 echo -n "Reading configuration"
 if [ "$1" ]; then
-    if [ -e "$1" ]; then 
+    if [ -e "$1" ]; then
         source "$1"
         echo " from $1"
     else
         echo " [ERROR: file $1 not found]"
         exit 1
-    fi    
+    fi
 elif [ -e ./bootstrap_setup ]; then
     source ./bootstrap_setup
     echo " from ./bootstrap_setup"
@@ -117,18 +117,18 @@ for mod in ${modules}; do
 done
 
 # Point out missing local.yml configuration
-if [ ! -e "vm-setup/ansible/group_vars/local.yml" ]; then
+if [ ! -e "vm-setup/ansible/vars/local.yml" ]; then
     if [ ! -e "local.yml" ]; then
         echo "No local configuration found. Creating one from local.yml.sample"
-        cp "vm-setup/ansible/group_vars/local.yml.sample" "local.yml"
+        cp "vm-setup/ansible/vars/local.yml.sample" "local.yml"
     fi
-    ln -s "../../../local.yml" "vm-setup/ansible/group_vars/local.yml"
+    ln -s "../../../local.yml" "vm-setup/ansible/vars/local.yml"
 else
     echo -n "Verify your existing local configuration"
-    if [ -h "vm-setup/ansible/group_vars/local.yml" ]; then
+    if [ -h "vm-setup/ansible/vars/local.yml" ]; then
         echo " in ${COLLECTION}/local.yml"
     else
-        echo " in ${COLLECTION}/vm-setup/ansible/group_vars/local.yml"
+        echo " in ${COLLECTION}/vm-setup/ansible/vars/local.yml"
     fi
 fi
 

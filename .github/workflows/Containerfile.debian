@@ -9,6 +9,6 @@ WORKDIR /ansible
 RUN apt-get update && apt-get install -y git ansible ansible-lint
 
 RUN ansible-galaxy install -r requirements.yml || true
-RUN ansible-playbook playbook.yml -e "setup=ci-base-image"
+RUN ansible-playbook playbook.yml -e "@vars/ci-base-image.yml"
 
 RUN rm -fr /ansible

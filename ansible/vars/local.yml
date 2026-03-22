@@ -7,6 +7,6 @@
 
 # Create your own setup file, e.g., myVM.yml
 # and specify it on the ansible-playbook command line:
-# ansible-playbook ... playbook.yml -e "setup=myVM"
+# ansible-playbook ... playbook.yml -e @myVM.yml
 
 m_base: true

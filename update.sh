@@ -38,10 +38,10 @@ fi
 
 ( cd ${collection_dir}; git checkout --recurse-submodules ${slug}; git pull --recurse-submodules )
 
-if [ ! -e "${collection_dir}/vm-setup/ansible/configs/local.yml" ]; then
-    ln -s "../../../local.yml" "${collection_dir}/vm-setup/ansible/configs/local.yml"
+if [ ! -e "${collection_dir}/vm-setup/ansible/vars/local.yml" ]; then
+    ln -s "../../../local.yml" "${collection_dir}/vm-setup/ansible/vars/local.yml"
 fi
 
 cd ${bootstrap_dir}/ansible
 ansible-galaxy install -r requirements.yml || true
-ansible-playbook playbook.yml "$@"
+ansible-playbook playbook.yml "$@" -e "@vars/local.yml"
