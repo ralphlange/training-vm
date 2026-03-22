@@ -10,6 +10,6 @@ COPY ansible /ansible
 WORKDIR /ansible
 
 RUN ansible-galaxy install -r requirements.yml || true
-RUN ansible-playbook playbook.yml -e "setup=ci-base-image"
+RUN ansible-playbook playbook.yml -e "@vars/ci-base-image.yml"
 
 RUN rm -fr /ansible

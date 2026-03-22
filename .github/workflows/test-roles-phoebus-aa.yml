@@ -7,7 +7,7 @@ on:
       - 'parallel-ci-pipelines*'
     paths:
       - '.github/workflows/test-roles-phoebus-aa.yml'
-      - 'ansible/configs/ci-*.yml'
+      - 'ansible/vars/ci-*.yml'
       - 'ansible/playbook.yml'
       - 'ansible/requirements.yml'
       - 'ansible/roles/epics-tools/**'
@@ -15,7 +15,7 @@ on:
   pull_request:
     paths:
     - '.github/workflows/test-roles-phoebus-aa.yml'
-    - 'ansible/configs/ci-*.yml'
+    - 'ansible/vars/ci-*.yml'
     - 'ansible/playbook.yml'
     - 'ansible/requirements.yml'
     - 'ansible/roles/epics-tools/**'
@@ -60,4 +60,4 @@ jobs:
       - name: Build ${{ matrix.conf.name }}
         run: |
           cd ansible
-          ansible-playbook -v playbook.yml -e "setup=${{ matrix.conf.id }}"
+          ansible-playbook -v playbook.yml -e "@vars/${{ matrix.conf.id }}.yml"

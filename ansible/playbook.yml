@@ -2,14 +2,6 @@
 - name: Set up training VM
   hosts: local
 
-  vars:
-    # default configuration file if not specified on the CLI
-    setup: "local"
-
-  # Load the configuration based on the 'setup' variable
-  vars_files:
-    - "configs/{{ setup }}.yml"
-
   pre_tasks:
     - name: Load OS-specific variables with fallback
       ansible.builtin.include_vars: "{{ item }}"

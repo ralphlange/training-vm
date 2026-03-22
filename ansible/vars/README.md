@@ -2,7 +2,7 @@
 
 This folder contains collections of configurations and user setups.
 
-*File: `configs/ci-base-image.yml`*
+*File: `vars/ci-base-image.yml`*
 
 Setup used to create the container image
 that runs container-based CI on GitHub Actions.
@@ -10,26 +10,26 @@ This saves time by
 starting from a common container image with the initial setup
 and running independent VM installs in parallel.
 
-*File: `configs/ci-*.yml`*
+*File: `vars/ci-*.yml`*
 
 Setups for the different container-based CI runs
 that are used on GitHub Actions.
 This saves time by running independent builds in parallel.
 
-*File: `configs/container.yml`*
+*File: `vars/container.yml`*
 
 Small setup for running inside containers.
 
-*File: `configs/everything.yml`*
+*File: `vars/everything.yml`*
 
 Full setup that tries to install as many roles/modules as possible.
 Does not work inside containers.
 
-*File: `configs/local.yml`*
+*File: `vars/local.yml`*
 
-Reasonably small setup - used as default when `setup` is not defined on the command line.
+Reasonably small setup.
 
-*File: `configs/local.yml.sample`*
+*File: `vars/local.yml.sample`*
 
 Commented sample of a setup file.
 Copy the content to `local.yml` or a new setup file
