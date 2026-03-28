@@ -10,9 +10,9 @@ Here are the reasons for differences:
 - bluesky cannot build in CI because that is containers in containers. (there are ways to do this and we can revisit this later)
 - the latest p4p released TODAY (2024-10-01 v4.2.0) does build with python 3.12 and now works with all 4 distros
 - pvapy - downgrading from 5.4.1 to 5.3.1 makes it build on Rocky. The later version tries to check for boost 1.78.0 and fails. 5.3.1 won't build on distros with python 3.12 and also fails on Ubuntu for boost version reasons.
-- areadetector uses a deprecated function in xmllib2 and Fedora's version is too new.
+- areadetector uses a deprecated function in xmllib2 and Fedora's, Rocky 9's, and Ubuntu 24.04 (Noble)'s version is too new.
 
 In summary:
 
-- Rocky is the only distro for which everything builds.
-- Ubuntu builds everything except pvaPy.
+- Rocky 8 is the only distro for which everything builds.
+- Ubuntu (except 24.04) builds everything except pvaPy.

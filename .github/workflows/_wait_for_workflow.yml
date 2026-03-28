@@ -1,0 +1,69 @@
+on:
+  workflow_call:
+    inputs:
+      workflow_name:
+        required: true
+        type: string
+    outputs:
+      active-run-id:
+        description: The ID of the active run if any
+        value: ${{ jobs.check.outputs.active-run-id }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      active-run-id: ${{ steps.check.outputs.active-run-id }}
+    steps:
+      - name: Check for running workflow
+        id: check
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const workflows = await github.rest.actions.listRepoWorkflows({ owner, repo });
+            const workflow = workflows.data.workflows.find(w => w.name === "${{ inputs.workflow_name }}");
+            if (!workflow) {
+              console.log("Workflow not found");
+              return;
+            }
+
+            const pendingRuns = await github.rest.actions.listWorkflowRuns({
+              owner,
+              repo,
+              workflow_id: workflow.id,
+              head_sha: context.sha
+            });
+
+            const activeRun = pendingRuns.data.workflow_runs.find(r =>
+              ['in_progress', 'queued', 'requested', 'waiting'].includes(r.status)
+            );
+
+            if (activeRun) {
+              console.log(`Found active run of '${{ inputs.workflow_name }}' for this commit: ${activeRun.html_url}`);
+              core.setOutput('active-run-id', activeRun.id.toString());
+            } else {
+              console.log(`No active run of '${{ inputs.workflow_name }}' found for this commit.`);
+            }
+      - name: Wait for workflow to complete
+        if: steps.check.outputs.active-run-id != ''
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const run_id = parseInt("${{ steps.check.outputs.active-run-id }}");
+            while (true) {
+              const { data: run } = await github.rest.actions.getWorkflowRun({
+                owner,
+                repo,
+                run_id
+              });
+              if (run.status === 'completed') {
+                if (run.conclusion !== 'success') {
+                  core.setFailed(`Workflow '${{ inputs.workflow_name }}' failed with conclusion: ${run.conclusion}`);
+                }
+                break;
+              }
+              console.log(`Waiting for workflow '${{ inputs.workflow_name }}' (run_id: ${run_id}) to complete... (status: ${run.status})`);
+              await new Promise(resolve => setTimeout(resolve, 30000));
+            }

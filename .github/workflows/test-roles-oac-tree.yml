@@ -1,0 +1,75 @@
+name: "Test Roles: oac-tree"
+
+on:
+  push:
+    branches:
+      - main
+      - 'parallel-ci-pipelines*'
+    paths:
+      - '.github/workflows/test-roles-oac-tree.yml'
+      - 'ansible/vars/ci-*.yml'
+      - 'ansible/playbook.yml'
+      - 'ansible/requirements.yml'
+      - 'ansible/roles/oac-tree/**'
+  pull_request:
+    paths:
+    - '.github/workflows/test-roles-oac-tree.yml'
+    - 'ansible/vars/ci-*.yml'
+    - 'ansible/playbook.yml'
+    - 'ansible/requirements.yml'
+    - 'ansible/roles/oac-tree/**'
+  workflow_dispatch:
+
+jobs:
+  check:
+    uses: ./.github/workflows/_check.yml
+
+  wait:
+    needs: check
+    if: needs.check.outputs.branch-pr == ''
+    uses: ./.github/workflows/_wait_for_workflow.yml
+    with:
+      workflow_name: "Rebuild Container Images"
+    permissions:
+      actions: read
+
+  prep:
+    runs-on: ubuntu-latest
+    outputs:
+      repo_name: ${{ steps.lowercase.outputs.repo_name }}
+      image_tag: ${{ steps.tag.outputs.image_tag }}
+    steps:
+      - id: lowercase
+        run: echo "repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
+      - id: tag
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "image_tag=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+          else
+            echo "image_tag=latest" >> $GITHUB_OUTPUT
+          fi
+
+  test:
+    needs: [check, prep, wait]
+    name: "${{ matrix.distro }}: ${{ matrix.conf.name }}"
+    if: |
+      always() &&
+      needs.check.outputs.branch-pr == '' &&
+      (needs.wait.result == 'success' || needs.wait.result == 'skipped')
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [ubuntu, rocky, debian, fedora]
+        conf:
+          - name: "oac-tree"
+            id: "ci-oac-tree"
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ needs.prep.outputs.repo_name }}/epics-training-base-${{ matrix.distro }}:${{ needs.prep.outputs.image_tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Build ${{ matrix.conf.name }}
+        run: |
+          cd ansible
+          ansible-playbook -v playbook.yml -e "@vars/${{ matrix.conf.id }}.yml"

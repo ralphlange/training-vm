@@ -3,6 +3,7 @@
   ansible.builtin.apt:
     name: "{{ module.required_debs }}"
     state: present
+    update_cache: true
   become: true
   when: is_debian and module.required_debs is defined
 
@@ -67,8 +68,16 @@
         regexp: "^SUPPORT="
       become: true
 
+    - name: "{{ module.name }} rebuild | Link RELEASE.local"
+      ansible.builtin.file:
+        src: "{{ epics_install_path }}/RELEASE.local"
+        dest: "{{ epics_install_path }}/{{ module.id }}-{{ module.version }}/configure/RELEASE.local"
+        state: link
+      become: true
+      when: module.id != 'base'
+
     - name: "{{ module.name }} rebuild | Run pre-build hook"
-      include_tasks: "{{ epics_module_parent_role_path }}/tasks/{{ module.pre_hook }}"
+      include_tasks: "{{ module.pre_hook }}"
       when: module.pre_hook is defined
 
     - name: "{{ module.name }} rebuild | Compile from sources (this may take a while)"
@@ -84,7 +93,7 @@
       become: true
 
     - name: "{{ module.name }} rebuild | Run post-build hook"
-      include_tasks: "{{ epics_module_parent_role_path }}/tasks/{{ module.post_hook }}"
+      include_tasks: "{{ module.post_hook }}"
       when: module.post_hook is defined
 
     - name: "{{ module.name }} rebuild | Show build result"

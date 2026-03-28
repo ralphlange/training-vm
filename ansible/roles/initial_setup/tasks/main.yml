@@ -67,6 +67,7 @@
       ansible.builtin.dnf:
         name:
           - "@{{ distro.devel_group }}"
+          - gcc-c++
           - vim
           - sudo
           - openssl
