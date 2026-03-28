@@ -34,7 +34,11 @@ jobs:
       actions: read
 
   prep:
+    needs: [check, wait]
+    if: always() && needs.check.outputs.branch-pr == '' && (needs.wait.result == 'success' || needs.wait.result == 'skipped')
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
     outputs:
       repo_name: ${{ steps.lowercase.outputs.repo_name }}
       image_tag: ${{ steps.tag.outputs.image_tag }}
@@ -42,20 +46,46 @@ jobs:
       - id: lowercase
         run: echo "repo_name=${GITHUB_REPOSITORY,,}" >> $GITHUB_OUTPUT
       - id: tag
-        run: |
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "image_tag=pr-${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-          else
-            echo "image_tag=latest" >> $GITHUB_OUTPUT
-          fi
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const workflow_name = "Rebuild Container Images";
+
+            if (context.eventName === 'pull_request') {
+              const pr_num = context.payload.pull_request.number;
+              const pr_tag = `pr-${pr_num}`;
+
+              const workflows = await github.rest.actions.listRepoWorkflows({ owner, repo });
+              const workflow = workflows.data.workflows.find(w => w.name === workflow_name);
+              if (workflow) {
+                const runs = await github.rest.actions.listWorkflowRuns({
+                  owner,
+                  repo,
+                  workflow_id: workflow.id,
+                  event: 'pull_request',
+                  status: 'success'
+                });
+                // Check if any successful run exists for this specific PR
+                const prRun = runs.data.workflow_runs.find(r =>
+                  r.pull_requests && r.pull_requests.some(pr => pr.number === pr_num)
+                );
+                if (prRun) {
+                  console.log(`Found successful '${workflow_name}' run for PR #${pr_num}. Using tag: ${pr_tag}`);
+                  core.setOutput('image_tag', pr_tag);
+                  return;
+                }
+              }
+              console.log(`No successful '${workflow_name}' run found for PR #${pr_num}. Falling back to 'latest'.`);
+              core.setOutput('image_tag', 'latest');
+            } else {
+              core.setOutput('image_tag', 'latest');
+            }
 
   test:
-    needs: [check, prep, wait]
+    needs: [check, prep]
     name: "${{ matrix.distro }}: ${{ matrix.conf.name }}"
-    if: |
-      always() &&
-      needs.check.outputs.branch-pr == '' &&
-      (needs.wait.result == 'success' || needs.wait.result == 'skipped')
+    if: always() && needs.prep.result == 'success'
     strategy:
       fail-fast: false
       matrix:
@@ -68,7 +98,7 @@ jobs:
       image: ghcr.io/${{ needs.prep.outputs.repo_name }}/epics-training-base-${{ matrix.distro }}:${{ needs.prep.outputs.image_tag }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
       - name: Build ${{ matrix.conf.name }}
         run: |
           cd ansible
