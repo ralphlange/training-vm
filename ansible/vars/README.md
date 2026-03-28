@@ -51,4 +51,4 @@ Ubuntu builds everything except `pvaPy`.
   5.3.1 also fails on Ubuntu for different boost version reasons.
 - `areaDetector` uses a deprecated function in `xmllib2`;
   Fedora's version is too new.
-- `areaDetector` also fails on debian because its version of ansible does not support 'search_string' in lineinfile which is used in adcore_prep.yml. Trying to get an new ansible from the ubuntu ppa (as per ansible docs) fails with dependecy conflicts.
+- `areaDetector` also fails on debian because its version of ansible does not support 'search_string' in lineinfile which is used in adcore_prep.yml. Trying to get an new ansible from the ubuntu ppa (as per ansible docs) fails with dependency conflicts.

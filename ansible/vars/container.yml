@@ -20,7 +20,7 @@ epics_tools: true
 #docker: true
 # the attempt to make docker outside docker work is a failure because the
 # compose file tries to mount host folders it cannot see. For the moment
-# disable buesky build in containers
+# disable bluesky build in containers
 bluesky: false
 
 # tell ansible that we are in a container instead of VM
