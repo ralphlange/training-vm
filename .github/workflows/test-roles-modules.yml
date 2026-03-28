@@ -12,6 +12,7 @@ on:
       - 'ansible/requirements.yml'
       - 'ansible/roles/m-*/**'
       - '!ansible/roles/m-base/**'
+      - '!ansible/roles/m-areadetector/**'
   pull_request:
     paths:
     - '.github/workflows/test-roles-modules.yml'
@@ -20,6 +21,7 @@ on:
     - 'ansible/requirements.yml'
     - 'ansible/roles/m-*/**'
     - '!ansible/roles/m-base/**'
+    - '!ansible/roles/m-areadetector/**'
   workflow_dispatch:
 
 jobs:
