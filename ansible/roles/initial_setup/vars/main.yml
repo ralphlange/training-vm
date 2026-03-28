@@ -4,37 +4,3 @@ root_partition: "{{ ansible_facts.mounts | json_query('[?mount == `/`].device') 
 root_fs_type: "{{ ansible_facts.mounts | json_query('[?mount == `/`].fstype') | first }}"
 partitions: "{{ ansible_facts.devices['root_disk'].partitions.keys() | list | sort }}"
 last_partition_no: "{{ ansible_facts.devices['root_disk'].partitions.keys() | list | length }}"
-
-redhat_defaults:
-  gnome_group: "Workstation"
-  devel_group: "Development Tools"
-  gdm_config: "/etc/gdm/custom.conf"
-  installer: "dnf"
-  openssl_config: "/etc/crypto-policies/back-ends/opensslcnf.config"
-  system_ca_trust_dir: "/etc/pki/ca-trust/source/anchors"
-  system_ca_trust_update: "/usr/bin/update-ca-trust"
-  lib_dirname: "lib64"
-
-debian_defaults:
-  gnome_group: "gnome-core"
-  gdm_config: "/etc/gdm3/daemon.conf"
-  installer: "apt"
-  openssl_config: "/etc/ssl/openssl.cnf"
-  system_ca_trust_dir: "/usr/local/share/ca-certificates"
-  system_ca_trust_update: "/usr/sbin/update-ca-certificates"
-  lib_dirname: "lib"
-
-distros:
-  Rocky: "{{ redhat_defaults }}"
-  Fedora: "{{ redhat_defaults | ansible.builtin.combine({'gnome_group':'gnome-desktop', 'devel_group':'development-tools'}) }}"
-  Debian: "{{ debian_defaults }}"
-  Ubuntu: "{{ debian_defaults | ansible.builtin.combine({'gdm_config':'/etc/gdm3/custom.conf'}) }}"
-
-distro: "{{ distros[ansible_facts['distribution']] }}"
-
-is_debian: '{{ distro.installer == "apt" }}'
-is_redhat: '{{ distro.installer == "dnf" }}'
-
-docker: "{{ 'docker' if is_debian else 'podman' }}"
-
-dev_user: "epics-dev"

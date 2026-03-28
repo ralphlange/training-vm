@@ -1,7 +1,6 @@
 ---
 - name: Install pvaPy
-  include_role:
-    name: epics-module
+  include_tasks: "{{ epics_build_module_task }}"
   vars:
     epics_modules_to_build: "{{ m_pvapy_modules }}"
   when:

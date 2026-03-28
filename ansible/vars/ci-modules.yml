@@ -1,0 +1,12 @@
+---
+# Overrides for CI testing on GitHub Actions
+
+# EPICS Modules (except areaDetector which is tested separately)
+
+m_base: true
+m_seq: true
+m_opcua: true
+m_stream: true
+m_p4p: true
+
+in_container: true

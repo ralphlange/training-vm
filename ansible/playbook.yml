@@ -2,66 +2,141 @@
 - name: Set up training VM
   hosts: local
 
-  roles:
-    - role: initial_setup
+  pre_tasks:
+    - name: Load OS-specific variables with fallback
+      ansible.builtin.include_vars: "{{ item }}"
+      with_first_found:
+        - files:
+            - "{{ ansible_facts['distribution'] }}_{{ ansible_facts['distribution_major_version'] }}.yml"
+            - "{{ ansible_facts['distribution'] }}.yml"
+            - "{{ ansible_facts['os_family'] }}.yml"
+            - "default.yml"
+          paths:
+            - vars/os
+      tags: always
+
+  tasks:
+    - name: Check that distro has been identified
+      ansible.builtin.fail:
+        msg: "Unsupported distro {{ ansible_facts['distribution'] }}."
+      when: is_debian == false and is_redhat == false
+
+    - name: Initial setup
+      include_role:
+        name: initial_setup
+      when: initial_setup is defined and initial_setup | bool
       tags: initial_setup
-      when: initial_setup | default(false) | bool
 
-    - role: catrust
+    - name: CA trust
+      include_role:
+        name: catrust
+      when: catrust is defined and catrust | bool
       tags: catrust
-      when: catrust | default(false) | bool
 
-    - role: common #  <- mandatory
-      tags: common
-
-    - role: m-base
+    - name: EPICS Base
+      include_role:
+        name: m-base
+      when: m_base is defined and m_base | bool
       tags: m-base
-      when: m_base | default(false) | bool
 
-    - role: m-areadetector
+    - name: ASYN
+      include_role:
+        name: m-asyn
+      when: m_asyn is defined and m_asyn | bool
+      tags: m-asyn
+
+    - name: Autosave
+      include_role:
+        name: m-autosave
+      when: m_autosave is defined and m_autosave | bool
+      tags: m-autosave
+
+    - name: SScan
+      include_role:
+        name: m-sscan
+      when: m_sscan is defined and m_sscan | bool
+      tags: m-sscan
+
+    - name: Calc
+      include_role:
+        name: m-calc
+      when: m_calc is defined and m_calc | bool
+      tags: m-calc
+
+    - name: Busy
+      include_role:
+        name: m-busy
+      when: m_busy is defined and m_busy | bool
+      tags: m-busy
+
+    - name: AreaDetector
+      include_role:
+        name: m-areadetector
+      when: m_areadetector is defined and m_areadetector | bool
       tags: m-areadetector
-      when: m_areadetector | default(false) | bool
 
-    - role: m-opcua
+    - name: OPC UA
+      include_role:
+        name: m-opcua
+      when: m_opcua is defined and m_opcua | bool
       tags: m-opcua
-      when: m_opcua | default(false) | bool
 
-    - role: m-p4p
+    - name: P4P
+      include_role:
+        name: m-p4p
+      when: m_p4p is defined and m_p4p | bool
       tags: m-p4p
-      when: m_p4p | default(false) | bool
 
-    - role: m-pvaPy
+    - name: pvaPy
+      include_role:
+        name: m-pvaPy
+      when: m_pvaPy is defined and m_pvaPy | bool
       tags: m-pvaPy
-      when: m_pvaPy | default(false) | bool
 
-    - role: m-seq
+    - name: Sequencer
+      include_role:
+        name: m-seq
+      when: m_seq is defined and m_seq | bool
       tags: m-seq
-      when: m_seq | default(false) | bool
 
-    - role: m-stream
+    - name: StreamDevice
+      include_role:
+        name: m-stream
+      when: m_stream is defined and m_stream | bool
       tags: m-stream
-      when: m_stream | default(false) | bool
 
-    - role: docker
+    - name: Docker
+      include_role:
+        name: docker
+      when: docker is defined and docker | bool
       tags: docker
-      when: docker | default(false) | bool
 
-    - role: bluesky
-      tags: bluesky
-      when: bluesky | default(false) | bool
+    - name: Bluesky
+      when: bluesky is defined and bluesky | bool
       become: true
-      become_user: "{{ dev_user}}"
+      become_user: "{{ dev_user }}"
+      tags: bluesky
+      block:
+        - name: Run Bluesky role
+          include_role:
+            name: bluesky
 
-    - role: epics-tools
+    - name: EPICS Tools
+      include_role:
+        name: epics-tools
+      when: epics_tools is defined and epics_tools | bool
       tags: epics_tools
-      when: epics_tools | default(false) | bool
 
-    - role: oac-tree
+    - name: OAC Tree
+      include_role:
+        name: oac-tree
+      when: oac_tree is defined and oac_tree | bool
       tags: oac_tree
-      when: oac_tree | default(false) | bool
 
-    - role: archiver-appliance
+    - name: Archiver Appliance
+      include_role:
+        name: archiver-appliance
+      when: archiver_appliance is defined and archiver_appliance | bool
       tags: archiver_appliance
-      when: archiver_appliance | default(false) | bool
 
   environment: "{{ proxy_env }}"

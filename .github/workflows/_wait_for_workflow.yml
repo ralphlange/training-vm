@@ -1,0 +1,82 @@
+on:
+  workflow_call:
+    inputs:
+      workflow_name:
+        required: true
+        type: string
+    outputs:
+      active-run-id:
+        description: The ID of the active run if any
+        value: ${{ jobs.check.outputs.active-run-id }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      active-run-id: ${{ steps.check.outputs.active-run-id }}
+    steps:
+      - name: Wait for workflow to start or complete
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const workflow_name = "${{ inputs.workflow_name }}";
+
+            // Try to find an active run multiple times to handle race conditions
+            let activeRun = null;
+            for (let i = 0; i < 5; i++) {
+              const workflows = await github.rest.actions.listRepoWorkflows({ owner, repo });
+              const workflow = workflows.data.workflows.find(w => w.name === workflow_name);
+              if (!workflow) {
+                console.log(`Workflow '${workflow_name}' not found.`);
+                return;
+              }
+
+              const pendingRuns = await github.rest.actions.listWorkflowRuns({
+                owner,
+                repo,
+                workflow_id: workflow.id,
+                head_sha: context.sha
+              });
+
+              activeRun = pendingRuns.data.workflow_runs.find(r =>
+                ['in_progress', 'queued', 'requested', 'waiting'].includes(r.status)
+              );
+
+              if (activeRun) break;
+
+              // If no active run, check if one completed recently
+              const completedRun = pendingRuns.data.workflow_runs.find(r => r.status === 'completed');
+              if (completedRun) {
+                 console.log(`Workflow '${workflow_name}' already completed for this commit: ${completedRun.html_url}`);
+                 return;
+              }
+
+              console.log(`No active or completed run for '${workflow_name}' found yet. Retrying in 10s...`);
+              await new Promise(resolve => setTimeout(resolve, 10000));
+            }
+
+            if (activeRun) {
+              console.log(`Found active run of '${workflow_name}' for this commit: ${activeRun.html_url}`);
+              core.setOutput('active-run-id', activeRun.id.toString());
+
+              const run_id = activeRun.id;
+              while (true) {
+                const { data: run } = await github.rest.actions.getWorkflowRun({
+                  owner,
+                  repo,
+                  run_id
+                });
+                if (run.status === 'completed') {
+                  if (run.conclusion !== 'success') {
+                    core.setFailed(`Workflow '${workflow_name}' failed with conclusion: ${run.conclusion}`);
+                  }
+                  break;
+                }
+                console.log(`Waiting for workflow '${workflow_name}' (run_id: ${run_id}) to complete... (status: ${run.status})`);
+                await new Promise(resolve => setTimeout(resolve, 30000));
+              }
+            } else {
+              console.log(`No active run of '${workflow_name}' found for this commit after retries.`);
+            }
