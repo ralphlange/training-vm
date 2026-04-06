@@ -3,8 +3,7 @@ name: "Test Roles: EPICS Modules"
 on:
   push:
     branches:
-      - main
-      - 'parallel-ci-pipelines*'
+      - 'main'
     paths:
       - '.github/workflows/test-roles-modules.yml'
       - 'ansible/vars/ci-*.yml'

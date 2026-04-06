@@ -3,8 +3,7 @@ name: "Test Roles: Phoebus & AA"
 on:
   push:
     branches:
-      - main
-      - 'parallel-ci-pipelines*'
+      - 'main'
     paths:
       - '.github/workflows/test-roles-phoebus-aa.yml'
       - 'ansible/vars/ci-*.yml'

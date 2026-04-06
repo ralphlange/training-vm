@@ -3,8 +3,7 @@ name: "Rebuild Container Images"
 on:
   push:
     branches:
-      - main
-      - 'parallel-ci-pipelines*'
+      - 'main'
     paths:
       - '.github/workflows/rebuild-container-images.yml'
       - '.github/workflows/Containerfile.*'
