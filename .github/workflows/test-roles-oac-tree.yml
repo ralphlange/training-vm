@@ -2,9 +2,6 @@ name: "Test Roles: oac-tree"
 
 on:
   push:
-    branches:
-      - main
-      - 'parallel-ci-pipelines*'
     paths:
       - '.github/workflows/test-roles-oac-tree.yml'
       - 'ansible/vars/ci-*.yml'
