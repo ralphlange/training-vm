@@ -29,7 +29,7 @@ jobs:
     uses: ./.github/workflows/_wait_for_workflow.yml
     with:
       workflow_name: "rebuild-container-images"
-      sha: ${{ github.sha }}
+      sha: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
   prep:
     runs-on: ubuntu-latest
@@ -52,6 +52,10 @@ jobs:
           - name: "oac-tree"
             id: "ci-oac-tree"
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      packages: read
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -62,10 +66,12 @@ jobs:
         with:
           name: epics-training-base-${{ matrix.distro }}-image
           path: /tmp
+          run-id: ${{ needs.wait.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Load image
         if: needs.wait.outputs.artifact_exists == 'true'
-        run: docker load -i /tmp/epics-training-base-${{ matrix.distro }}-image.tar
+        run: docker load -i /tmp/image-${{ matrix.distro }}.tar
 
       - name: Build ${{ matrix.conf.name }}
         run: |

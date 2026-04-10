@@ -13,12 +13,16 @@ on:
       artifact_exists:
         description: "Whether a new image artifact was created"
         value: ${{ jobs.wait.outputs.artifact_exists }}
+      run_id:
+        description: "The ID of the workflow run that created the artifact"
+        value: ${{ jobs.wait.outputs.run_id }}
 
 jobs:
   wait:
     runs-on: ubuntu-latest
     outputs:
       artifact_exists: ${{ steps.check.outputs.artifact_exists }}
+      run_id: ${{ steps.check.outputs.run_id }}
     steps:
       - name: Wait for workflow
         uses: actions/github-script@v7
@@ -42,6 +46,11 @@ jobs:
 
               const run = runs.workflow_runs.find(r => r.head_sha === sha);
 
+              if (run) {
+                console.log(`Found run ${run.id} with status ${run.status}`);
+                core.setOutput("run_id", run.id.toString());
+              }
+
               if (!run) {
                 if (retry_count < max_retries) {
                   console.log(`No run found for this workflow and SHA. Retry ${retry_count + 1}/${max_retries}...`);
@@ -56,6 +65,7 @@ jobs:
 
               if (run.status === "completed") {
                 console.log(`Run completed with conclusion: ${run.conclusion}`);
+                core.setOutput("run_id", run.id.toString());
                 if (run.conclusion === "success") {
                   if (context.ref !== 'refs/heads/main') {
                     artifact_exists = "true";
