@@ -31,7 +31,6 @@ jobs:
 
   build:
     needs: check
-    if: needs.check.outputs.branch-pr == ''
     strategy:
       fail-fast: false
       matrix:
@@ -67,5 +66,14 @@ jobs:
           file: ./.github/workflows/Containerfile.${{ matrix.distro }}
           build-args: |
             IMAGE=${{ matrix.image }}
-          push: true
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: ghcr.io/${{ env.REPO_NAME }}/epics-training-base-${{ matrix.distro }}:latest
+          outputs: ${{ (github.ref != 'refs/heads/main') && format('type=docker,dest=/tmp/image-{0}.tar', matrix.distro) || '' }}
+
+      - name: Upload image artifact
+        if: github.ref != 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: epics-training-base-${{ matrix.distro }}-image
+          path: /tmp/image-${{ matrix.distro }}.tar
+          retention-days: 1
