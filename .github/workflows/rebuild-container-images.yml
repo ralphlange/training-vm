@@ -59,6 +59,8 @@ jobs:
       - name: Set lower case repository name
         run: |
           echo "REPO_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
       - name: Build and push container image
         uses: docker/build-push-action@v7
         with:
