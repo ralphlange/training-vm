@@ -1,0 +1,11 @@
+# defaults for phoebus
+---
+phoebus_version: v5.0.2
+
+phoebus_launcher: "/opt/phoebus/lib/phoebus/phoebus-product/phoebus.sh"
+phoebus_owner: "root"
+force_gpu: false
+
+mvn_home: "/opt/phoebus/lib/apache-maven"
+
+epics_services_account: root
