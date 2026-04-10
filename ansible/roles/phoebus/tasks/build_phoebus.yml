@@ -4,7 +4,7 @@
   become: true
   git:
     repo: "https://github.com/ControlSystemStudio/phoebus.git"
-    dest: /opt/phoebus/lib/phoebus
+    dest: /opt/epics-tools/lib/phoebus
     version: "{{ phoebus_version }}"
     force: true
   register: phoebus_repo
@@ -13,7 +13,7 @@
   command: mvn clean verify -P sphinx -N
   become: true
   args:
-    chdir: /opt/phoebus/lib/phoebus/
+    chdir: /opt/epics-tools/lib/phoebus/
   environment:
     JAVA_HOME: "{{ java_home }}"
     MVN_HOME: "{{ mvn_home }}"
@@ -24,7 +24,7 @@
   command: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true
   become: true
   args:
-    chdir: /opt/phoebus/lib/phoebus/
+    chdir: /opt/epics-tools/lib/phoebus/
   environment:
     JAVA_HOME: "{{ java_home }}"
     MVN_HOME: "{{ mvn_home }}"
@@ -34,7 +34,7 @@
 - name: ensure config directory exists for phoebus
   become: true
   file:
-    path: /opt/phoebus/config
+    path: /opt/epics-tools/config
     state: directory
     owner: "{{ epics_services_account }}"
     group: "{{ epics_services_account }}"
@@ -43,7 +43,7 @@
   become: true
   template:
     src: preferences.ini.j2
-    dest: /opt/phoebus/config/preferences.ini
+    dest: /opt/epics-tools/config/preferences.ini
     mode: 0755
     owner: "{{ phoebus_owner }}"
     group: "{{ phoebus_owner }}"
@@ -52,7 +52,7 @@
   become: true
   template:
     src: logging.properties.j2
-    dest: /opt/phoebus/config/logging.properties
+    dest: /opt/epics-tools/config/logging.properties
     mode: 0755
     owner: "{{ phoebus_owner }}"
     group: "{{ phoebus_owner }}"

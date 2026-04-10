@@ -120,17 +120,17 @@
     dest: "{{ epics_install_path }}/RELEASE.local"
   become: true
 
-- name: "{{ module.name }} | Create phoebus.sh fragment"
+- name: "{{ module.name }} | Create epics-tools.sh fragment"
   copy:
     content: "PATH={{ epics_install_path }}/{{ module.id }}-{{ module.version }}/bin/linux-{{ ansible_facts['architecture'] }}:$PATH\n"
-    dest: "{{ epics_install_path }}/phoebus.sh.d/{{ module.release_sortkey }}-{{ module.id }}"
+    dest: "{{ epics_install_path }}/epics-tools.sh.d/{{ module.release_sortkey }}-{{ module.id }}"
   become: true
   when: module.add_to_path is defined
 
-- name: "{{ module.name }} | Update (re-assemble) phoebus.sh"
+- name: "{{ module.name }} | Update (re-assemble) epics-tools.sh"
   assemble:
-    src: "{{ epics_install_path }}/phoebus.sh.d"
-    dest: "/etc/profile.d/phoebus.sh"
+    src: "{{ epics_install_path }}/epics-tools.sh.d"
+    dest: "/etc/profile.d/epics-tools.sh"
   become: true
 
 - name: "{{ module.name }} | Copy .bob files to {{ opi_install_path }}"
