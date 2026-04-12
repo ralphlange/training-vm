@@ -6,6 +6,7 @@ phoebus_launcher: "/opt/epics-tools/lib/phoebus/phoebus-product/phoebus.sh"
 phoebus_owner: "root"
 force_gpu: false
 
+mvn_version: 3.9.14
 mvn_home: "/opt/epics-tools/lib/apache-maven"
 
 epics_services_account: root
