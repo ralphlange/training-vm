@@ -14,11 +14,13 @@ from its home directory.
 eval "$(curl -L https://raw.githubusercontent.com/epics-training/training-vm/main/bootstrap.sh)"
 ```
 
-This will ask for the slug (shot name) of the training event
-you want to install the VM for.
-(This maps to a branch of the repo containing the ),
-download dependencies (git, ansible, ...),
-and clone the specified branch of the collection repo.
+This will
+- ask for the slug (short name) of the training event
+  you want to install the VM for.
+  (The slug maps to a branch of the repo containing the collection),
+- download missing dependencies (git, ansible, ...) and
+- clone the specified branch of the collection repo
+  into a directory called `training`.
 
 Now change into the `training` collection directory.
 
