@@ -116,20 +116,23 @@ for mod in ${modules}; do
     fi
 done
 
-# Point out missing local.yml configuration
-if [ ! -e "vm-setup/ansible/vars/local.yml" ]; then
-    if [ ! -e "local.yml" ]; then
-        echo "No local configuration found. Creating one from local.yml.sample"
-        cp "vm-setup/ansible/vars/local.yml.sample" "local.yml"
-    fi
-    ln -s "../../../local.yml" "vm-setup/ansible/vars/local.yml"
-else
-    echo -n "Verify your existing local configuration"
+# Set up local.yml configuration
+if [ -e "vm-setup/ansible/vars/local.yml" ]; then
     if [ -h "vm-setup/ansible/vars/local.yml" ]; then
-        echo " in ${COLLECTION}/local.yml"
+        echo -n "Removing existing local configuration link"
+        echo    " vm-setup/ansible/vars/local.yml"
+        rm -f vm-setup/ansible/vars/local.yml
     else
-        echo " in ${COLLECTION}/vm-setup/ansible/vars/local.yml"
+        echo -n "Moving existing local configuration file"
+        echo    " vm-setup/ansible/vars/local.yml -> local.yml.bak"
+        mv -f vm-setup/ansible/vars/local.yml vm-setup/ansible/vars/local.yml.bak
     fi
+fi
+if [ ! -e "local.yml" ]; then
+    echo "No local configuration found. Creating one from local.yml.sample"
+    cp "vm-setup/ansible/vars/local.yml.sample" "local.yml"
+else
+    ln -s "../../../local.yml" "vm-setup/ansible/vars/local.yml"
 fi
 
 echo "Run ${COLLECTION}/vm-setup/update.sh at any time to finish or update your installation."
