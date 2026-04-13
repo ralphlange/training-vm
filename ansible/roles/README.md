@@ -5,7 +5,7 @@
 ### m-areadetector
 The AreaDetector image processing framework
 (modules Core, SimDetector and PVADriver)
-and their dependencies Busy, SScan and Calc.
+and their dependency Busy.
 
 ### m-base
 EPICS Base C++ and PVXS.
@@ -58,8 +58,11 @@ The ASYN Driver framework.
 ### m-autosave
 The AutoSaveRestore (EPICS Process Database persistence) module.
 
-### common
-Common tasks. (mandatory)
+### m-calc
+The CALC (array and string calculation) module.
+
+### m-sscan
+The SSCAN (multi-dimensional scan record) module.
 
 ### docker
 Installation of Docker or Podman to run containers.
@@ -70,7 +73,7 @@ One-off role called at the first run in a freshly provisioned VM.
 ### java
 Java SDK needed for Phoebus and Services.
 
-# Adding epics modules
+# Adding EPICS modules
 
 m-base provides a task file to install one or more EPICS modules.
 
