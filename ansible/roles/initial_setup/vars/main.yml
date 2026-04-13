@@ -2,5 +2,5 @@
 root_disk: sda
 root_partition: "{{ ansible_facts.mounts | json_query('[?mount == `/`].device') | first }}"
 root_fs_type: "{{ ansible_facts.mounts | json_query('[?mount == `/`].fstype') | first }}"
-partitions: "{{ ansible_facts.devices['root_disk'].partitions.keys() | list | sort }}"
-last_partition_no: "{{ ansible_facts.devices['root_disk'].partitions.keys() | list | length }}"
+partitions: "{{ ansible_facts.devices[root_disk].partitions.keys() | list | sort }}"
+last_partition_no: "{{ ansible_facts.devices[root_disk].partitions.keys() | list | length }}"

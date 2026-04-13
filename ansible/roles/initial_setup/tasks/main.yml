@@ -10,6 +10,7 @@
 
 - name: Replace mirrorlist with specific mirrors for Rocky
   when: ansible_facts['distribution'] == 'Rocky'
+  become: true
   block:
     - name: Comment out mirrorlist for Rocky
       ansible.builtin.replace:
