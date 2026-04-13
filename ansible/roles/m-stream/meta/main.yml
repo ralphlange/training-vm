@@ -2,3 +2,4 @@
 dependencies:
   - role: m-base
   - role: m-asyn
+  - role: m-calc
