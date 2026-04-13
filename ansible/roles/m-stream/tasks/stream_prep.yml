@@ -23,6 +23,10 @@
       - --transform
       - "s|^[^/]*|pcre|" # normalize source path
   become: true
+  register: pcre_download_result
+  until: pcre_download_result is success
+  retries: 3
+  delay: 5
 
 - name: "{{ module.name }} pre-build hook | Configure PCRE"
   ansible.builtin.command:
