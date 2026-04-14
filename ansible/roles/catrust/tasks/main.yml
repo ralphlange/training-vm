@@ -25,7 +25,7 @@
   community.general.ini_file:
     path: "{{ distro.openssl_config }}"
     section: ssl_sect
-    option: system_default 
+    option: system_default
     value: system_default_sect
     state: present
   become: true
@@ -35,7 +35,7 @@
   community.general.ini_file:
     path: "{{ distro.openssl_config }}"
     section: system_default_sect
-    option: Options  
+    option: Options
     # UnsafeLegacyRenegotiation for ubuntu <= 22.04
     # UnsafeLegacyServerConnect for ubuntu >= 24.04
     value: UnsafeLegacyRenegotiation,UnsafeLegacyServerConnect
@@ -85,6 +85,11 @@
     cp -f {{ ca_temp_path }} {{ ca_trust_pem_path }}
   become: true
   when: temp_cert.stat.exists and check_pem.rc == 0
+
+- name: "Persist cert's paths as facts"
+  set_fact:
+    ca_trust_der_path: {{ ca_trust_der_path }}
+    ca_trust_pem_path: {{ ca_trust_pem_path }}
 
 - name: Copy PEM certificate to system ca trust directory
   ansible.builtin.copy:
