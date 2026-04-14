@@ -87,9 +87,9 @@
   when: temp_cert.stat.exists and check_pem.rc == 0
 
 - name: "Persist cert's paths as facts"
-  set_fact:
-    ca_trust_der_path: {{ ca_trust_der_path }}
-    ca_trust_pem_path: {{ ca_trust_pem_path }}
+  ansible.builtin.set_fact:
+    ca_trust_der_path: "{{ ca_trust_der_path }}"
+    ca_trust_pem_path: "{{ ca_trust_pem_path }}"
 
 - name: Copy PEM certificate to system ca trust directory
   ansible.builtin.copy:
