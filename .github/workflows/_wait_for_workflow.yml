@@ -34,7 +34,7 @@ jobs:
 
             let artifact_exists = "false";
             let retry_count = 0;
-            const max_retries = 10; // Wait up to 5 minutes for the run to appear
+            const max_retries = 6; // Wait up to 3 minutes for the run to appear
 
             while (true) {
               const { data: runs } = await github.rest.actions.listWorkflowRuns({
