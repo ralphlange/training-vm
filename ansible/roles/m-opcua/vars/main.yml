@@ -12,6 +12,7 @@ m_opcua_modules:
       - cmake
       - libssl-dev
       - libxml2-dev
+      - xca
     required_rpms:
       - cmake
       - openssl-devel

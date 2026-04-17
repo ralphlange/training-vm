@@ -1,0 +1,45 @@
+---
+- name: "{{ module.name }} pre-build hook | Install xca build dependencies"
+  ansible.builtin.dnf:
+    name:
+      - qt5-linguist
+      - qt5-qtbase-devel
+      - qt5-qttools-devel
+    install_weak_deps: false
+    state: present
+  become: true
+
+- name: "{{ module.name }} pre-build hook | Download the xca application"
+  ansible.builtin.get_url:
+    url: "https://github.com/chris2511/xca/releases/download/RELEASE.2.9.0/xca-2.9.0.tar.gz"
+    dest: "/tmp/xca-2.9.0.tar.gz"
+
+- name: "{{ module.name }} pre-build hook | Extract xca application"
+  ansible.builtin.unarchive:
+    src: "/tmp/xca-2.9.0.tar.gz"
+    dest: "/opt/opcua"
+    owner: root
+    group: root
+    remote_src: true
+    extra_opts:
+      - --transform
+      - "s|^[^/]*|xca|" # normalize source path
+  become: true
+
+- name: "{{ module.name }} pre-build hook | Configure xca (cmake)"
+  ansible.builtin.command:
+    chdir: "/opt/opcua/xca"
+    cmd: cmake -B build xca
+  become: true
+
+- name: "{{ module.name }} pre-build hook | Build xca (cmake)"
+  ansible.builtin.command:
+    chdir: "/opt/opcua/xca"
+    cmd: cmake --build build -j {{ ansible_facts.processor_vcpus }}
+  become: true
+
+- name: "{{ module.name }} pre-build hook | Install xca (cmake)"
+  ansible.builtin.command:
+    chdir: "/opt/opcua/xca"
+    cmd: cmake --install build
+  become: true
