@@ -18,6 +18,7 @@ archiver_appliance_java_max_heapsize: "512M"
 
 # --- The user whose Firefox profile we are modifying ---
 firefox_user: "{{ dev_user }}"
+firefox_profile_name: "default"
 
 # --- Bookmark Details ---
 bookmark_title: "Archiver"
