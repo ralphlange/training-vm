@@ -1,4 +1,4 @@
---- 
+---
 - name: Create temporary location for WAR unpacking
   become: true
   ansible.builtin.file:
