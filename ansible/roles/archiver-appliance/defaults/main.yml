@@ -15,6 +15,7 @@ archiver_appliance_storage: "{{ tomcat_home }}/storage"
 archiver_appliance_java_maxmetaspace: "256M"
 archiver_appliance_java_initial_heapsize: "512M"
 archiver_appliance_java_max_heapsize: "512M"
+archiver_appliance_java_heap_tuning_opts: "-XX:MaxHeapFreeRatio=10 -XX:MinHeapFreeRatio=5 -XX:-ShrinkHeapInSteps"
 
 # --- The user whose Firefox profile we are modifying ---
 firefox_user: "{{ dev_user }}"

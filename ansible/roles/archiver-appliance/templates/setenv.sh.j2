@@ -11,7 +11,7 @@
 #                   only be used by Tomcat itself, not by the stop process,
 #                   the version command etc.
 #                   Examples are heap size, GC logging, JMX ports etc.
-CATALINA_OPTS="-XX:MaxMetaspaceSize={{ archiver_appliance_java_maxmetaspace }} -XX:+UseG1GC -Xms{{ archiver_appliance_java_initial_heapsize }} -Xmx{{ archiver_appliance_java_max_heapsize }} -ea"
+CATALINA_OPTS="-XX:MaxMetaspaceSize={{ archiver_appliance_java_maxmetaspace }} -XX:+UseG1GC -Xms{{ archiver_appliance_java_initial_heapsize }} -Xmx{{ archiver_appliance_java_max_heapsize }} {{ archiver_appliance_java_heap_tuning_opts }} -ea"
 
 #   CATALINA_TMPDIR (Optional) Directory path location of temporary directory
 #                   the JVM should use (java.io.tmpdir).  Defaults to
