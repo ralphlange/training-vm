@@ -130,6 +130,7 @@
   ansible.builtin.template:
     src: user.conf_nogreeter
     dest: /var/lib/AccountsService/users/vagrant
+  when: install_graphics | bool
 
 - name: Ensure that python refers to python3 (fixes issue with Rocky container)
   ansible.builtin.file:
