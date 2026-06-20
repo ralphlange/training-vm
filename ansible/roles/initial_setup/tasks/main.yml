@@ -126,6 +126,14 @@
     validate: "visudo -cf %s"
   become: true
 
+- name: Ensure AccountsService directory exists
+  ansible.builtin.file:
+    path: /var/lib/AccountsService/users
+    state: directory
+    mode: '0755'
+  become: true
+  when: install_graphics | bool
+
 - name: Hide user vagrant from the GDM greeter (login user select)
   ansible.builtin.template:
     src: user.conf_nogreeter
