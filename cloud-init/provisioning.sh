@@ -24,6 +24,10 @@ fi
 # Install Ansible and Git
 if [[ "$installer" == "apt" ]]; then
     export DEBIAN_FRONTEND=noninteractive
+    cat > /etc/apt/apt.conf.d/01norecommend << EOF
+APT::Install-Recommends "0";
+APT::Install-Suggests "0";
+EOF
     apt-get update
     apt-get install -y git ansible-core python3-jmespath
 elif [[ "$installer" == "dnf" ]]; then
