@@ -72,9 +72,18 @@
   notify:
     - Restart archiver-appliance
 
-- name: "Run the Archiver-Appliance's MariaDB install script"
+- name: Check if we have set up the archiver tables
+  community.mysql.mysql_query:
+    login_db: archappl
+    login_user: archappl
+    login_password: archappl
+    query: show tables
+  register: tables
+
+- name: Run the Archiver-Appliance's MariaDB install script
   ansible.builtin.shell:
-    cmd: "mariadb -u archappl —password=archappl archappl < {{ tomcat_home }}/webapps/mgmt/install/archappl_mysql.sql || true"
+    cmd: "mariadb -u archappl --password=archappl archappl < {{ tomcat_home }}/webapps/mgmt/install/archappl_mysql.sql"
+  when: "tables.rowcount == 0"
 
 - name: Create Archiver Appliance systemd service
   become: true
