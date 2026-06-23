@@ -25,10 +25,10 @@ fi
 if [[ "$installer" == "apt" ]]; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get update
-    apt-get install -y git ansible python3-jmespath
+    apt-get install -y git ansible-core python3-jmespath
 elif [[ "$installer" == "dnf" ]]; then
     dnf install -y epel-release || dnf update -y --refresh
-    dnf install -y git ansible python3-jmespath
+    dnf install -y git ansible-core python3-jmespath
 fi
 
 # Clone the training-vm repo
