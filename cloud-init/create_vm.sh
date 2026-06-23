@@ -10,19 +10,24 @@ REPO_URL="https://github.com/epics-training/training-vm.git"
 REPO_BRANCH="main"
 DISK_SIZE="150G"
 VM_DIR="VMs"
+CPUS="4"
 
 usage() {
-    echo "Usage: $0 -f <flavor> [-g] [-r <repo_url>] [-b <branch>]"
+    echo "Usage: $0 -f <flavor> [-j <cpus> ] [-g] [-r <repo_url>] [-b <branch>]"
     echo "  -f: flavor (fedora, rocky, debian, ubuntu)"
+    echo "  -j: number of cpus to use (default: $CPUS)"
     echo "  -g: install graphics (default: false)"
     echo "  -r: repository URL (default: $REPO_URL)"
     echo "  -b: repository branch (default: $REPO_BRANCH)"
     exit 1
 }
 
-while getopts "f:gr:b:" opt; do
+while getopts "f:j:gr:b:" opt; do
     case $opt in
         f) FLAVOR=$OPTARG ;;
+        j) if [[ $OPTARG =~ ^[1-9][0-9]*$ ]]; then
+             CPUS=$OPTARG
+           fi ;;
         g) INSTALL_GRAPHICS="true" ;;
         r) REPO_URL=$OPTARG ;;
         b) REPO_BRANCH=$OPTARG ;;
@@ -107,8 +112,8 @@ cloud-localds "$SEED_ISO" user-data meta-data
 echo "Launching QEMU for provisioning (this may take a while)..."
 # Using -nographic for headless provisioning. The script will poweroff when done.
 qemu-system-x86_64 \
-    -m 4096 \
-    -smp 4 \
+    -m "$CPUS"G \
+    -smp "$CPUS" \
     -hda "$OUTPUT_QCOW2" \
     -cdrom "$SEED_ISO" \
     -nographic \
