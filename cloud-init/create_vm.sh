@@ -104,6 +104,10 @@ $(sed '      s/^/      /' provisioning.sh.tmp)
 
 runcmd:
   - /root/provisioning.sh
+
+growpart:
+  devices: [/]
+resize_rootfs: true
 EOF
 
 if [[ ! -z "$CA_CERT" ]]; then
