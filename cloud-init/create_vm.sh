@@ -11,22 +11,27 @@ REPO_BRANCH="main"
 DISK_SIZE="150G"
 VM_DIR="VMs"
 CPUS="4"
+CA_CERT=""
 
 usage() {
-    echo "Usage: $0 -f <flavor> [-j <cpus> ] [-g] [-r <repo_url>] [-b <branch>]"
+    echo "Usage: $0 -f <flavor> [-j <cpus>] [-c <ca_cert>] [-g] [-r <repo_url>] [-b <branch>]"
     echo "  -f: flavor (fedora, rocky, debian, ubuntu)"
     echo "  -j: number of cpus to use (default: $CPUS)"
+    echo "  -c: CA certificate to add (in PEM format)"
     echo "  -g: install graphics (default: false)"
     echo "  -r: repository URL (default: $REPO_URL)"
     echo "  -b: repository branch (default: $REPO_BRANCH)"
     exit 1
 }
 
-while getopts "f:j:gr:b:" opt; do
+while getopts "f:j:c:gr:b:" opt; do
     case $opt in
         f) FLAVOR=$OPTARG ;;
         j) if [[ $OPTARG =~ ^[1-9][0-9]*$ ]]; then
              CPUS=$OPTARG
+           fi ;;
+        c) if [ -f "$OPTARG" ]; then
+             CA_CERT=$OPTARG
            fi ;;
         g) INSTALL_GRAPHICS="true" ;;
         r) REPO_URL=$OPTARG ;;
@@ -100,6 +105,16 @@ $(sed '      s/^/      /' provisioning.sh.tmp)
 runcmd:
   - /root/provisioning.sh
 EOF
+
+if [[ ! -z "$CA_CERT" ]]; then
+cat <<EOF >> user-data
+
+ca_certs:
+  trusted:
+  - |
+$(sed '    s/^/    /' ${CA_CERT})
+EOF
+fi
 
 # Meta-data
 cat <<EOF > meta-data
