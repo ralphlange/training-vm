@@ -55,4 +55,3 @@ else
 fi
 
 docker exec $name bash -c "/initial_setup.sh"
-

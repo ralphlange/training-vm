@@ -98,7 +98,7 @@
     path: "{{ home_directory }}/.bluesky/tiled_data"
     state: directory
     mode: '0777'
-    
+
 # Needed to determine the used ports further down
 - name: Start context containers
   command: "{{ docker }} compose up -d"
@@ -112,8 +112,8 @@
 - name: Configure the firewall
   include_tasks:
     file: firewalld.yml
-  when: ('firewalld.service' in ansible_facts.services) and (ansible_facts.services['firewalld.service'].state == 'running') 
-  
+  when: ('firewalld.service' in ansible_facts.services) and (ansible_facts.services['firewalld.service'].state == 'running')
+
 - name: Configure UFW
   include_tasks:
     file: ufw.yml
@@ -124,4 +124,3 @@
   command: "{{ docker }} compose down"
   args:
     chdir: "{{ bluesky_deployment_dir_path }}"
-

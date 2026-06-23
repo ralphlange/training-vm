@@ -12,17 +12,17 @@
 # In addition, various fields of the PV like .NAME, .ADEL, .MDEL, .RTYP etc are also obtained
 # These are passed to this python script as a dictionary argument to a method called determinePolicy
 # The variable name in the python environment for this information is 'pvInfo' (so use other variable names etc.).
-# The method is expected to use this information to make decisions on various archiving parameters. 
+# The method is expected to use this information to make decisions on various archiving parameters.
 # The result is expected to be another dictionary that is placed into the variable called "pvPolicy".
 # Optionally, fields in addition to the VAL field that are to be archived with the PV are passed in as a property of pvPolicy called 'archiveFields'
 # If the user overrides the policy, this is communicated in the pvinfo as a property called 'policyName'
 #
 # In addition, this script must communicate the list of available policies to the JVM as another method called getPolicyList which takes no arguments.
-# The results of this method is placed into a variable called called 'pvPolicies'.  
+# The results of this method is placed into a variable called called 'pvPolicies'.
 # The dictionary is a name to description mapping - the description is used in the UI; the name is what is communicated to determinePolicy as a user override
 #
 # In addition, this script must communicate the list of fields that are to be archived as part of the stream in a method called getFieldsArchivedAsPartOfStream.
-# The results of this method is placed into a list variable called called 'pvStandardFields'.  
+# The results of this method is placed into a list variable called called 'pvStandardFields'.
 
 
 # Generate a list of policy names. This is used to feed the dropdown in the UI.
