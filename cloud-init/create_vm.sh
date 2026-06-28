@@ -133,6 +133,7 @@ echo "Launching QEMU for provisioning (this may take a while)..."
 qemu-system-x86_64 \
     -m "$CPUS"G \
     -smp "$CPUS" \
+    -accel kvm \
     -hda "$OUTPUT_QCOW2" \
     -cdrom "$SEED_ISO" \
     -nographic \
