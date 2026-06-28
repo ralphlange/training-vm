@@ -11,32 +11,6 @@
   ansible.builtin.debug:
     var: ansible_facts
 
-- name: Replace mirrorlist with specific mirrors for Rocky
-  when: ansible_facts['distribution'] == 'Rocky'
-  become: true
-  block:
-    - name: Comment out mirrorlist for Rocky
-      ansible.builtin.replace:
-        path: "/etc/yum.repos.d/{{ item }}"
-        regexp: "^(mirrorlist=.*)$"
-        replace: "#\\1"
-      with_items:
-        - rocky.repo
-        - rocky-extras.repo
-        - rocky-devel.repo
-        - rocky-addons.repo
-
-    - name: Uncomment baseurl for Rocky
-      ansible.builtin.replace:
-        path: "/etc/yum.repos.d/{{ item }}"
-        regexp: "^#(baseurl=.*)$"
-        replace: "\\1"
-      with_items:
-        - rocky.repo
-        - rocky-extras.repo
-        - rocky-devel.repo
-        - rocky-addons.repo
-
 - name: APT Upgrade all packages; install Dev Tools and Gnome
   when: ansible_facts['os_family'] == 'Debian'
   become: true
