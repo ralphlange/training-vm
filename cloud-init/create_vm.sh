@@ -131,9 +131,11 @@ cloud-localds "$SEED_ISO" user-data meta-data
 echo "Launching QEMU for provisioning (this may take a while)..."
 # Using -nographic for headless provisioning. The script will poweroff when done.
 qemu-system-x86_64 \
+    -cpu host \
+    -M q35,accel=kvm:tcg \
     -m "$CPUS"G \
     -smp "$CPUS" \
-    -accel kvm \
+    -parallel none \
     -hda "$OUTPUT_QCOW2" \
     -cdrom "$SEED_ISO" \
     -nographic \
