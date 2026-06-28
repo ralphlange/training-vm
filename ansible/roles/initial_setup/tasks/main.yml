@@ -41,13 +41,14 @@
   when: ansible_facts['os_family'] == 'Debian'
   become: true
   block:
-    - name: Upgrade all packages
+    - name: APT Update and upgrade all packages
       ansible.builtin.apt:
-        name: "*"
-        state: latest
+        upgrade: dist
         update_cache: true
+        autoclean: true
+        autoremove: true
 
-    - name: Install Dev Tools
+    - name: APT Install Dev Tools
       ansible.builtin.apt:
         name:
           - build-essential
@@ -57,7 +58,7 @@
           - sudo
           - openssl
 
-    - name: Install Gnome
+    - name: APT Install Gnome
       ansible.builtin.apt:
         name:
           - "{{ initial_setup_gnome_group }}"
@@ -67,12 +68,13 @@
   when: ansible_facts['os_family'] == 'RedHat'
   become: true
   block:
-    - name: Upgrade all packages
+    - name: RPM Upgrade all packages
       ansible.builtin.dnf:
         name: "*"
         state: latest
+        update_cache: true
 
-    - name: Install Dev Tools
+    - name: RPM Install Dev Tools
       ansible.builtin.dnf:
         name:
           - "@{{ initial_setup_devel_group }}"
@@ -81,21 +83,27 @@
           - sudo
           - openssl
         allowerasing: true # fix version conflicts for curl and coreutils on Rocky
+        install_weak_deps: false
 
-    - name: Install Gnome
+    - name: RPM Install Gnome
       ansible.builtin.dnf:
         name:
           - "@{{ initial_setup_gnome_group }}"
         allowerasing: true
+        install_weak_deps: false
       when: install_graphics | bool
 
-- name: Change default target to graphical.target
-  file:
-    src: /usr/lib/systemd/system/graphical.target
-    dest: /etc/systemd/system/default.target
-    state: link
-  become: true
+    - name: RPM clean cache
+      ansible.builtin.command: dnf clean all
+
+- name: Set default target to graphical.target
   when: not in_container and install_graphics | bool
+  become: true
+  ansible.builtin.systemd:
+    name: graphical.target
+    scope: system
+    enabled: true
+    force: yes
 
 - name: Make XOrg the default display manager
   ansible.builtin.lineinfile:
