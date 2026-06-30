@@ -87,14 +87,6 @@
       when: "'graphical' not in systemdefault.stdout"
       changed_when: true
 
-- name: Make XOrg the default display manager (disable Wayland)
-  when: not in_container and install_graphics | bool
-  become: true
-  ansible.builtin.lineinfile:
-    path: "{{ initial_setup_gdm_config }}"
-    search_string: "WaylandEnable"
-    line: "WaylandEnable=false"
-
 - name: Create development user
   ansible.builtin.user:
     name: "{{ dev_user }}"
