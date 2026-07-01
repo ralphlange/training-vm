@@ -32,7 +32,6 @@ EOF
     apt-get update
     apt-get install -y git ansible-core python3-jmespath
 elif [[ "$installer" == "dnf" ]]; then
-    dnf install -y epel-release || dnf update -y --refresh
     dnf install -y git ansible-core python3-jmespath
 fi
 
