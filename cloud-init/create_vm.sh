@@ -136,8 +136,8 @@ qemu-system-x86_64 \
     -m "$CPUS"G \
     -smp "$CPUS" \
     -parallel none \
-    -hda "$OUTPUT_QCOW2" \
-    -cdrom "$SEED_ISO" \
+    -drive file="$OUTPUT_QCOW2",if=virtio \
+    -drive file="$SEED_ISO",format=raw,if=virtio \
     -nographic \
     -net nic,model=virtio -net user
 
