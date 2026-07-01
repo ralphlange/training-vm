@@ -7,6 +7,7 @@ set -xe
 TRAINING_VM_REPO="WILL BE SET BY create_vm.sh"
 TRAINING_VM_BRANCH="WILL BE SET BY create_vm.sh"
 INSTALL_GRAPHICS="WILL BE SET BY create_vm.sh"
+SET_CATRUST="WILL BE SET BY create_vm.sh"
 
 # Can be set through environment
 ANSIBLE_ARGS="${ANSIBLE_ARGS:-}"
@@ -52,6 +53,7 @@ ansible-playbook playbook.yml \
     -e @vars/local.yml \
     -e "initial_setup=true" \
     -e "install_graphics=$INSTALL_GRAPHICS" \
+    -e "catrust=$SET_CATRUST" \
     $ANSIBLE_ARGS
 
 # Remove the cloned training-vm repo

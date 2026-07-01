@@ -12,6 +12,7 @@ DISK_SIZE="150G"
 VM_DIR="VMs"
 CPUS="4"
 CA_CERT=""
+SET_CATRUST="false"
 
 usage() {
     echo "Usage: $0 -f <flavor> [-j <cpus>] [-c <ca_cert>] [-g] [-r <repo_url>] [-b <branch>]"
@@ -32,6 +33,7 @@ while getopts "f:j:c:gr:b:" opt; do
            fi ;;
         c) if [ -f "$OPTARG" ]; then
              CA_CERT=$OPTARG
+             SET_CATRUST="true"
            fi ;;
         g) INSTALL_GRAPHICS="true" ;;
         r) REPO_URL=$OPTARG ;;
@@ -90,34 +92,40 @@ echo "Generating cloud-init seed..."
 sed -e "s|TRAINING_VM_REPO=.*|TRAINING_VM_REPO=\"$REPO_URL\"|" \
     -e "s|TRAINING_VM_BRANCH=.*|TRAINING_VM_BRANCH=\"$REPO_BRANCH\"|" \
     -e "s|INSTALL_GRAPHICS=.*|INSTALL_GRAPHICS=\"$INSTALL_GRAPHICS\"|" \
+    -e "s|SET_CATRUST=.*|SET_CATRUST=\"$SET_CATRUST\"|" \
     provisioning.sh > provisioning.sh.tmp
 
 # We need to embed the script into user-data
-# Using a simpler approach than the template for reliability in bash
 cat <<EOF > user-data
 #cloud-config
-write_files:
-  - path: /root/provisioning.sh
-    permissions: '0755'
-    content: |
-$(sed '      s/^/      /' provisioning.sh.tmp)
-
 runcmd:
   - /root/provisioning.sh
 
 growpart:
   devices: [/]
 resize_rootfs: true
+
+write_files:
+  - path: /root/provisioning.sh
+    permissions: '0755'
+    content: |
+$(sed '      s/^/      /' provisioning.sh.tmp)
 EOF
 
 if [[ ! -z "$CA_CERT" ]]; then
+# Copy the cert for the catrust role
+#   and use it for cloud-init
 cat <<EOF >> user-data
+  - path: /tmp/corporate_root_ca.crt
+    content: |
+$(sed '      s/^/      /' ${CA_CERT})
 
 ca_certs:
   trusted:
   - |
 $(sed '    s/^/    /' ${CA_CERT})
 EOF
+
 fi
 
 # Meta-data
