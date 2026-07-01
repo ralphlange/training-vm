@@ -96,27 +96,13 @@
     comment: "EPICS Developer"
   become: true
 
-- name: Make users passwordless for sudo in group wheel
+- name: Make development user passwordless for sudo in group wheel
   ansible.builtin.lineinfile:
     path: /etc/sudoers
     regexp: "^%{{ dev_user }}"
     line: "%{{ dev_user }} ALL=(ALL) NOPASSWD: ALL"
     validate: "visudo -cf %s"
   become: true
-
-- name: Ensure AccountsService directory exists
-  ansible.builtin.file:
-    path: /var/lib/AccountsService/users
-    state: directory
-    mode: '0755'
-  become: true
-  when: install_graphics | bool
-
-- name: Hide user vagrant from the GDM greeter (login user select)
-  ansible.builtin.template:
-    src: user.conf_nogreeter
-    dest: /var/lib/AccountsService/users/vagrant
-  when: install_graphics | bool
 
 - name: Ensure that python refers to python3 (fixes issue with Rocky container)
   ansible.builtin.file:
