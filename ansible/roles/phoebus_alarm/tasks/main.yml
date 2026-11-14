@@ -76,7 +76,7 @@
         port: "{{ kafka_port }}"
         timeout: 120
 
-    # The alarm server creates its topics at startup (-create_topics)
+    # The alarm server creates its topics at startup
     - name: Wait for the alarm server to create the {{ alarm_config_name }} topic
       ansible.builtin.command:
         cmd: "{{ kafka_home }}/bin/kafka-topics.sh --bootstrap-server {{ alarm_kafka_server }} --list"

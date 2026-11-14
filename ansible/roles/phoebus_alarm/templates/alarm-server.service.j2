@@ -12,9 +12,10 @@ WorkingDirectory={{ alarm_server_home }}
 
 Environment="ALARM_SERVER_JAVA_OPTS={{ alarm_server_java_heap_opts }}"
 
-# -create_topics creates any missing Kafka topics for the configuration
-# (with the compaction/retention settings the alarm system needs)
-ExecStart=/usr/local/bin/alarm-server -noshell -create_topics -server {{ alarm_kafka_server }} -config {{ alarm_config_name }} -settings {{ alarm_server_settings }}
+# At startup, the alarm server (Phoebus >= 6) creates any missing Kafka
+# topics for the configuration and sets the compaction/retention settings
+# the alarm system needs
+ExecStart=/usr/local/bin/alarm-server -noshell -server {{ alarm_kafka_server }} -config {{ alarm_config_name }} -settings {{ alarm_server_settings }}
 SuccessExitStatus=143
 
 Restart=on-failure
