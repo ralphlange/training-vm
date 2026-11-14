@@ -1,5 +1,12 @@
 # Dependencies for phoebus
 ---
 allow_duplicates: true
+galaxy_info:
+  role_name: phoebus
+  namespace: epics
+  author: Ralph Lange
+  description: Ansible role to build and install Phoebus in a training VM
+  license: EPICS open license
+  min_ansible_version: "2.7"
 dependencies:
   - role: java
