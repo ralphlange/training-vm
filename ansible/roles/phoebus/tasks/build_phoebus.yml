@@ -15,7 +15,9 @@
   when: phoebus_repo.changed | bool
 
 - name: Build the common phoebus binaries (this may take a while)
-  command: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true
+  command: >-
+    mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true
+    -Dopenjfx.version={{ phoebus_openjfx_version }}
   become: true
   args:
     chdir: /opt/epics-tools/lib/phoebus/

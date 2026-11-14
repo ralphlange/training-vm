@@ -1,6 +1,10 @@
 # defaults for phoebus
 ---
 phoebus_version: v6.0.0
+# JavaFX version to build Phoebus with (overrides the version pinned in
+# Phoebus' pom.xml): the 21.0.7 pinned by v6.0.0 has no linux-aarch64 jars
+# on Maven Central, 21.0.11 has them for both architectures.
+phoebus_openjfx_version: "21.0.11"
 
 phoebus_launcher: "/opt/epics-tools/lib/phoebus/phoebus-product/phoebus.sh"
 phoebus_owner: "root"
