@@ -37,6 +37,13 @@ with this role; Kafka comes from the `kafka` role (a dependency).
 The alarm configuration name (`alarm_config_name`, default `Accelerator`)
 and Kafka address are set in `group_vars/all.yml`.
 
+### phoebus_alarm_logger
+Phoebus alarm logger as a systemd service: stores the alarm system's
+messages in Elasticsearch (`elasticsearch` role, a dependency) and serves
+them to the Phoebus "Alarm Log" table through its REST API
+(`alarm_logger_url` in `group_vars/all.yml`, default `http://localhost:9000`).
+Built by the `phoebus` role and pulls in `phoebus_alarm` (alarm server, Kafka).
+
 ### archiver_appliance
 Minimal install of the EPICS Archiver Appliance.
 
@@ -75,6 +82,11 @@ The SSCAN (multi-dimensional scan record) module.
 Apache Kafka message broker (single node, KRaft mode, localhost only)
 as a systemd service - the transport of the Phoebus alarm system.
 
+### elasticsearch
+Elasticsearch (single node, localhost only, security disabled)
+as a systemd service - the storage of the Phoebus alarm logger.
+Uses the JDK bundled with the release.
+
 ### docker
 Installation of Docker or Podman to run containers.
 
@@ -100,6 +112,8 @@ unsupported architecture) and thereby provides:
   (`x86_64-linux-gnu`, `aarch64-linux-gnu`).
 - `arch.java`: architecture token used by the Adoptium/Temurin release assets
   (`x64`, `aarch64`).
+- `arch.elasticsearch`: architecture token used by the Elasticsearch release
+  archives (`x86_64`, `aarch64`).
 - `is_x86_64` / `is_aarch64`: booleans, for gating a task that genuinely only
   applies to one architecture.
 

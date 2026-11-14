@@ -8,7 +8,9 @@ docker: true # for rootful this needs to happen before first reboot
 catrust: false
 phoebus: false
 phoebus_alarm: false
+phoebus_alarm_logger: false
 kafka: false
+elasticsearch: false
 oac_tree: false
 archiver_appliance: false
 bluesky: false
@@ -23,10 +25,13 @@ dev_user: "epics-dev"
 # by initial_setup (roles/initial_setup/tasks/homepage.yml)
 training_vm_homepage_dir: "/home/{{ dev_user }}/.local/share/training-vm-homepage"
 
-# Shared by the phoebus (client preferences) and phoebus_alarm (alarm server)
-# roles - the alarm configuration name is also the name of its Kafka topic
+# Shared by the phoebus (client preferences), phoebus_alarm (alarm server) and
+# phoebus_alarm_logger roles - the alarm configuration name is also the name
+# of its Kafka topic
 alarm_config_name: "Accelerator"
 alarm_kafka_server: "localhost:9092"
+# REST API of the alarm logger (port 9000 is the Phoebus client default)
+alarm_logger_url: "http://localhost:9000"
 
 # Default: false proxy
 proxy_env: {}

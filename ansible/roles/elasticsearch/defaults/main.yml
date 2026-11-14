@@ -1,0 +1,35 @@
+---
+# Defaults for Elasticsearch (single node, localhost only, no security)
+#
+# Modelled on the phoebus_services_elasticsearch role of
+# https://github.com/ControlSystemStudio/ansible-phoebus
+# Used by the Phoebus alarm logger (phoebus_alarm_logger role).
+#
+# Stays on the 8.x line: Phoebus (5.0) uses the Elasticsearch 8 Java client,
+# which is not supported against a 9.x server.
+
+elasticsearch_version: "8.19.25"
+# The download is verified against the .sha512 file Elastic publishes next to it
+elasticsearch_download_url: "https://artifacts.elastic.co/downloads/elasticsearch/\
+  elasticsearch-{{ elasticsearch_version }}-linux-{{ arch.elasticsearch }}.tar.gz"
+
+elasticsearch_base: "/opt/epics-tools/lib"
+elasticsearch_home: "{{ elasticsearch_base }}/elasticsearch"
+elasticsearch_config_dir: "/opt/epics-tools/config/elasticsearch"
+elasticsearch_data_dir: "/var/lib/elasticsearch"
+elasticsearch_log_dir: "/var/log/elasticsearch"
+elasticsearch_user: elasticsearch
+elasticsearch_group: elasticsearch
+
+elasticsearch_cluster_name: "training-vm"
+elasticsearch_node_name: "{{ ansible_facts['hostname'] }}"
+
+# Only listen on localhost (training VM, no authentication);
+# binding to loopback also keeps the production bootstrap checks
+# (vm.max_map_count etc.) from being enforced
+elasticsearch_listen_host: "127.0.0.1"
+elasticsearch_http_port: 9200
+elasticsearch_transport_port: 9300
+
+# Elasticsearch would otherwise size its heap to half of the RAM
+elasticsearch_heap_opts: "-Xms512m -Xmx512m"

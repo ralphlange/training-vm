@@ -1,0 +1,27 @@
+# {{ ansible_managed }}
+#
+# Elasticsearch - single node, localhost only, security disabled
+# for the Phoebus alarm logger on the Training-VM
+# https://www.elastic.co/guide/en/elasticsearch/reference/8.19/settings.html
+
+cluster.name: {{ elasticsearch_cluster_name }}
+node.name: {{ elasticsearch_node_name }}
+
+path.data: {{ elasticsearch_data_dir }}
+path.logs: {{ elasticsearch_log_dir }}
+
+network.host: {{ elasticsearch_listen_host }}
+http.port: {{ elasticsearch_http_port }}
+transport.port: {{ elasticsearch_transport_port }}
+
+discovery.type: single-node
+
+# Setting these explicitly also stops Elasticsearch from auto-configuring
+# security (and rewriting this file) on its first start
+xpack.security.enabled: false
+xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
+
+# Not needed on a training VM
+xpack.ml.enabled: false
+ingest.geoip.downloader.enabled: false

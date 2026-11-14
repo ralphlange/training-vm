@@ -1,0 +1,25 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+
+  # Molecule runs the roles directly, bypassing playbook.yml, so the
+  # architecture variables and the shared baseline settings the roles rely
+  # on have to be loaded here too (same sources as for playbook.yml).
+  pre_tasks:
+    - name: Load architecture-specific variables with fallback
+      ansible.builtin.include_vars: "{{ item }}"
+      with_first_found:
+        - files:
+            - "{{ ansible_facts['architecture'] }}.yml"
+            - "default.yml"
+          paths:
+            - "{{ playbook_dir }}/../../../../vars/arch"
+
+    - name: Load the shared baseline settings
+      ansible.builtin.include_vars: "{{ playbook_dir }}/../../../../group_vars/all.yml"
+
+  roles:
+    - role: initial_setup
+    - role: phoebus
+    - role: phoebus_alarm_logger

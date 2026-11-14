@@ -1,0 +1,8 @@
+---
+# Dependencies for the Phoebus alarm logger
+# (the alarm logger binaries come from the phoebus role,
+#  which playbook.yml runs whenever phoebus_alarm_logger is enabled)
+dependencies:
+  - role: java
+  - role: elasticsearch
+  - role: phoebus_alarm

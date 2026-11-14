@@ -1,0 +1,4 @@
+---
+# Elasticsearch runs on the JDK bundled in its release archive
+# (the version it is tested with), so it has no dependency on the java role
+dependencies: []
