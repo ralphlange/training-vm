@@ -1,6 +1,6 @@
 # defaults for phoebus
 ---
-phoebus_version: v5.0.2
+phoebus_version: v6.0.0
 
 phoebus_launcher: "/opt/epics-tools/lib/phoebus/phoebus-product/phoebus.sh"
 phoebus_owner: "root"
