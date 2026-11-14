@@ -9,6 +9,8 @@
     force: true
   register: phoebus_repo
 
+# The sphinx-maven-plugin downloads a prebuilt Sphinx binary that only
+# exists for x86_64, so the built-in help is not available on aarch64.
 - name: Build the documentation and help
   command: mvn clean verify -P sphinx -N
   become: true
@@ -18,7 +20,7 @@
     JAVA_HOME: "{{ java_home }}"
     MVN_HOME: "{{ mvn_home }}"
     PATH: "{{ java_home }}/bin:{{ mvn_home }}/bin:{{ ansible_env.PATH }}"
-  when: phoebus_repo.changed | bool
+  when: phoebus_repo.changed | bool and is_x86_64
 
 - name: Build the common phoebus binaries (this may take a while)
   command: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true

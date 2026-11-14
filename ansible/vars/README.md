@@ -42,6 +42,9 @@ just naming are:
   Automation only ships for x86_64 Linux, so it is not installed on `aarch64`.
   The module itself builds; only the interactive OPC UA browsing exercise is
   unavailable.
+- `phoebus`: the documentation/help build (`mvn -P sphinx`) uses a prebuilt
+  Sphinx binary that the `sphinx-maven-plugin` only provides for x86_64, so it
+  is skipped on `aarch64`. Phoebus builds and runs, without the built-in help.
 - `oac_tree`: on RedHat-family distros the Raven repository (which exists
   solely to provide the cosmetic `adwaita-qt6` Qt style) has no `aarch64` tree,
   so both are skipped there. oac-tree builds and runs, using the default Qt6
