@@ -9,6 +9,11 @@
     force: true
   register: phoebus_repo
 
+- name: Build the documentation and help
+  ansible.builtin.include_tasks:
+    file: build_docs.yml
+  when: phoebus_repo.changed | bool
+
 - name: Build the common phoebus binaries (this may take a while)
   command: mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true
   become: true
