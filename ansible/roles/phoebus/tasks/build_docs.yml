@@ -1,0 +1,52 @@
+---
+# Build the Phoebus documentation with Sphinx into docs/build/html, from
+# where the Maven product build copies it into the product's doc/ folder
+# (online help).
+# The docs need Sphinx >= 8.2, i.e. Python >= 3.11.
+
+- name: Check if the system Python is recent enough for the documentation
+  ansible.builtin.command: >-
+    python3 -c 'import sys; sys.exit(sys.version_info < (3, 11))'
+  register: phoebus_docs_system_python
+  changed_when: false
+  failed_when: false
+
+- name: Select the Python for the documentation build
+  ansible.builtin.set_fact:
+    phoebus_docs_python: >-
+      {{ 'python3' if phoebus_docs_system_python.rc == 0
+         else phoebus_docs_python_fallback }}
+
+- name: Install the Python for the documentation build
+  become: true
+  ansible.builtin.package:
+    name: >-
+      {{ [phoebus_docs_python]
+         + ([phoebus_docs_python ~ '-venv'] if is_debian else []) }}
+    state: present
+
+- name: Create the virtualenv for the documentation build
+  become: true
+  ansible.builtin.command:
+    cmd: "{{ phoebus_docs_python }} -m venv --clear {{ phoebus_docs_venv }}"
+  changed_when: true
+
+# Install the dependencies listed in docs/pyproject.toml (instead of
+# 'pip install .', which would try to package the docs directory)
+- name: Install the documentation build dependencies
+  become: true
+  ansible.builtin.shell:
+    cmd: >-
+      bin/python -c 'import tomllib;
+      deps = tomllib.load(open("{{ phoebus_docs_src }}/pyproject.toml", "rb"));
+      print("\n".join(deps["project"]["dependencies"]))' > requirements.txt
+      && bin/pip install -r requirements.txt
+    chdir: "{{ phoebus_docs_venv }}"
+  changed_when: true
+
+- name: Build the documentation (this may take a while)
+  become: true
+  ansible.builtin.command:
+    cmd: "{{ phoebus_docs_venv }}/bin/sphinx-build -M html source build"
+    chdir: "{{ phoebus_docs_src }}"
+  changed_when: true

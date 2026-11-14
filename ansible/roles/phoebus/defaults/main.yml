@@ -15,3 +15,10 @@ mvn_version: 3.9.14
 mvn_home: "/opt/epics-tools/lib/apache-maven"
 
 epics_services_account: root
+
+# Documentation build: virtualenv location, and the distro's Python package
+# to use where the system python3 is older than 3.11 (Rocky 9, Ubuntu 22.04)
+phoebus_docs_src: "/opt/epics-tools/lib/phoebus/docs"
+phoebus_docs_venv: "/opt/epics-tools/lib/phoebus-docs-venv"
+phoebus_docs_python_fallback: >-
+  {{ 'python3.12' if is_redhat else 'python3.11' }}
