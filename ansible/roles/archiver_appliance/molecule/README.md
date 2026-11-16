@@ -2,7 +2,8 @@
 
 Functional tests: the `default` scenario needs real services (MariaDB,
 Tomcat), so it runs a privileged systemd container (`ubuntu:22.04` plus
-systemd, see `resources/Dockerfile.j2`) with `in_container: false`. It
+systemd, image definition shared in
+`ansible/molecule/systemd/Dockerfile.j2`) with `in_container: false`. It
 converges the roles `initial_setup`, `m_base` (IOC and `pvget` for the
 tests), `phoebus` (Data Browser preferences) and `archiver_appliance`, then
 runs the testinfra tests in `resources/tests/test_archiver_appliance.py`.

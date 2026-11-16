@@ -36,7 +36,8 @@ driver:
 platforms:
   - name: archiver-appliance-docker
     image: ubuntu:22.04
-    dockerfile: ../resources/Dockerfile.j2
+    # relative to the scenario directory
+    dockerfile: ../../../../molecule/systemd/Dockerfile.j2
     pre_build_image: false
     command: /lib/systemd/systemd
     privileged: true
