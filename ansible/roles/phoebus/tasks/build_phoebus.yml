@@ -1,31 +1,67 @@
 ---
 # tasks file for cs_studio_phoebus
-- name: Clone and/or update the phoebus repo
-  become: true
-  git:
-    repo: "https://github.com/ControlSystemStudio/phoebus.git"
-    dest: /opt/epics-tools/lib/phoebus
-    version: "{{ phoebus_version }}"
-    force: true
-  register: phoebus_repo
+# Phoebus is built from the GitHub source tarball of the {{ phoebus_version }}
+# tag. The flag file inside the source tree is written only after a successful
+# build, so a failed or interrupted build is redone on the next run, and a
+# version change (or a leftover git checkout from earlier setups) replaces the
+# whole source tree. Delete the flag to force a rebuild.
+- name: Check the phoebus build flag
+  ansible.builtin.stat:
+    path: "{{ phoebus_src_path }}/.built-{{ phoebus_version }}"
+  register: phoebus_built_flag
 
-- name: Build the documentation and help
-  ansible.builtin.include_tasks:
-    file: build_docs.yml
-  when: phoebus_repo.changed | bool
+- name: Download, build and install Phoebus
+  when: not phoebus_built_flag.stat.exists
+  block:
+    - name: Remove an old phoebus source tree
+      become: true
+      ansible.builtin.file:
+        path: "{{ phoebus_src_path }}"
+        state: absent
 
-- name: Build the common phoebus binaries (this may take a while)
-  command: >-
-    mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true
-    -Dopenjfx.version={{ phoebus_openjfx_version }}
-  become: true
-  args:
-    chdir: /opt/epics-tools/lib/phoebus/
-  environment:
-    JAVA_HOME: "{{ java_home }}"
-    MVN_HOME: "{{ mvn_home }}"
-    PATH: "{{ java_home }}/bin:{{ mvn_home }}/bin:{{ ansible_env.PATH }}"
-  when: phoebus_repo.changed | bool
+    - name: Create the phoebus source directory
+      become: true
+      ansible.builtin.file:
+        path: "{{ phoebus_src_path }}"
+        state: directory
+        mode: "0755"
+
+    - name: "Download and unpack the phoebus sources {{ phoebus_version }}"
+      become: true
+      ansible.builtin.unarchive:
+        src: "{{ phoebus_tarball_url }}"
+        dest: "{{ phoebus_src_path }}"
+        remote_src: true
+        extra_opts:
+          - --strip-components=1
+      register: phoebus_download
+      until: phoebus_download is success
+      retries: 5
+      delay: 10
+
+    - name: Build the documentation and help
+      ansible.builtin.include_tasks:
+        file: build_docs.yml
+
+    - name: Build the common phoebus binaries (this may take a while)
+      ansible.builtin.command: >-
+        mvn clean install -DskipTests=true -Dmaven.javadoc.skip=true
+        -Dopenjfx.version={{ phoebus_openjfx_version }}
+      become: true
+      args:
+        chdir: "{{ phoebus_src_path }}"
+      environment:
+        JAVA_HOME: "{{ java_home }}"
+        MVN_HOME: "{{ mvn_home }}"
+        PATH: "{{ java_home }}/bin:{{ mvn_home }}/bin:{{ ansible_env.PATH }}"
+      changed_when: true
+
+    - name: Set the phoebus build flag
+      become: true
+      ansible.builtin.file:
+        path: "{{ phoebus_src_path }}/.built-{{ phoebus_version }}"
+        state: touch
+        mode: "0644"
 
 - name: ensure config directory exists for phoebus
   become: true

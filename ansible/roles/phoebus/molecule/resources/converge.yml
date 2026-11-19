@@ -28,7 +28,7 @@
           paths:
             - "{{ playbook_dir }}/../../../../vars/arch"
 
-  # initial_setup provides the base tools (git etc.) the phoebus role needs
+  # initial_setup provides the base tools (make, tar etc.) phoebus needs
   roles:
     - role: initial_setup
     - role: phoebus

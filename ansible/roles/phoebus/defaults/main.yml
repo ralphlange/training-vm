@@ -1,11 +1,15 @@
 # defaults for phoebus
 ---
 phoebus_version: v6.0.0
+# Phoebus is built from the source tarball of this tag
+phoebus_tarball_url: "https://github.com/ControlSystemStudio/phoebus/archive/\
+  refs/tags/{{ phoebus_version }}.tar.gz"
+phoebus_src_path: "/opt/epics-tools/lib/phoebus"
 # Override JavaFX version to build Phoebus with
 # 21.0.11 has linux-aarch64 jars on Maven Central.
 phoebus_openjfx_version: "21.0.11"
 
-phoebus_launcher: "/opt/epics-tools/lib/phoebus/phoebus-product/phoebus.sh"
+phoebus_launcher: "{{ phoebus_src_path }}/phoebus-product/phoebus.sh"
 phoebus_owner: "root"
 force_gpu: false
 
@@ -35,7 +39,7 @@ alarm_logger_url: "http://localhost:9000"
 
 # Documentation build: virtualenv location, and the distro's Python package
 # to use where the system python3 is older than 3.11 (Rocky 9, Ubuntu 22.04)
-phoebus_docs_src: "/opt/epics-tools/lib/phoebus/docs"
+phoebus_docs_src: "{{ phoebus_src_path }}/docs"
 phoebus_docs_venv: "/opt/epics-tools/lib/phoebus-docs-venv"
 phoebus_docs_python_fallback: >-
   {{ 'python3.12' if is_redhat else 'python3.11' }}
