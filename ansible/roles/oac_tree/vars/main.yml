@@ -4,7 +4,7 @@
 oactree_install_path: "/opt/oac-tree"
 
 oactree_bundle_repo: "https://github.com/oac-tree/oac-tree-bundle.git"
-oactree_bundle_version: "v1.4"
+oactree_bundle_version: "v1.6"
 
 required_debs:
   - cmake
@@ -15,6 +15,10 @@ required_debs:
   - libgtest-dev
   - libgmock-dev
   - libxml2-dev
+  # oac-tree-server (since v2.7, bundle v1.6): standalone Asio headers
+  # and OpenSSL for its websocket server
+  - libasio-dev
+  - libssl-dev
   - qt6-base-dev
   - qt6-svg-dev
   - qt6-charts-dev
@@ -30,6 +34,10 @@ required_rpms:
   - gtest-devel
   - gmock-devel
   - libxml2-devel
+  # oac-tree-server (since v2.7, bundle v1.6): standalone Asio headers
+  # (EPEL on Rocky) and OpenSSL for its websocket server
+  - asio-devel
+  - openssl-devel
   - qt6-qtbase-devel
   - qt6-qtsvg-devel
   - qt6-qtcharts-devel
